@@ -1,4 +1,4 @@
-# GroupSave - Swiss Group Activity Platform
+# linkup. - Swiss Group Activity Platform
 
 A modern, interactive web application for creating and joining group activities to save money on group tickets in Switzerland.
 
