@@ -38,35 +38,6 @@ const Home = () => {
               </p>
             </div>
 
-            {/* Search bar */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="bg-white/95 backdrop-blur-md rounded-2xl p-2 flex flex-col md:flex-row gap-2 shadow-2xl max-w-3xl mx-auto"
-            >
-              <input
-                type="text"
-                placeholder="Search activities..."
-                className="flex-1 bg-transparent text-gray-900 placeholder-gray-500 px-5 py-4 outline-none text-sm font-medium"
-                onKeyDown={(e) => e.key === 'Enter' && navigate('/browse')}
-              />
-              <select
-                className="bg-gray-50 text-gray-900 border border-gray-200 rounded-xl px-5 py-4 text-sm outline-none cursor-pointer font-medium"
-              >
-                <option value="">All Cities</option>
-                {['Zurich', 'Geneva', 'Basel', 'Bern', 'Lausanne'].map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-              <button
-                onClick={() => navigate('/browse')}
-                className="px-8 py-4 bg-sky-500 hover:bg-sky-400 text-white font-black rounded-xl transition-all text-sm shadow-lg"
-              >
-                Search
-              </button>
-            </motion.div>
-
             {/* Browse all activities button */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
