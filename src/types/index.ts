@@ -41,6 +41,7 @@ export interface EventStore {
   setCategory: (cat: string) => void;
   setView: (view: ViewMode) => void;
   getFilteredEvents: () => Event[];
+  getRecommendedEvents: () => Event[];
   displayToast: (message: string) => void;
   hideToast: () => void;
 }

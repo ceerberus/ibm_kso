@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import Landing from './pages/Landing';
 import Discover from './pages/Discover';
 import CreateEvent from './pages/CreateEvent';
 import Profile from './pages/Profile';
@@ -17,9 +18,9 @@ function TopBar() {
       <div className="font-syne text-xl font-extrabold text-dark">meetup.</div>
       <nav className="hidden md:flex gap-1">
         <Link
-          to="/"
+          to="/discover"
           className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-            isActive('/') ? 'bg-sky-50 text-primary' : 'text-slate-600 hover:bg-slate-50'
+            isActive('/discover') ? 'bg-sky-50 text-primary' : 'text-slate-600 hover:bg-slate-50'
           }`}
         >
           Discover
@@ -47,6 +48,20 @@ function TopBar() {
 }
 
 function AppContent() {
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
+  if (isLandingPage) {
+    return (
+      <>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+        </Routes>
+        <Toast />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background font-sans">
       <div className="max-w-[1400px] mx-auto bg-white min-h-screen flex flex-col shadow-xl">
@@ -54,7 +69,7 @@ function AppContent() {
         <div className="flex flex-1 min-h-0">
           <Sidebar />
           <Routes>
-            <Route path="/" element={<Discover />} />
+            <Route path="/discover" element={<Discover />} />
             <Route path="/create" element={<CreateEvent />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>

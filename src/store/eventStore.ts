@@ -99,6 +99,27 @@ export const useEventStore = create<EventStore>((set, get) => ({
     return events.filter((e) => e.category === activeCat);
   },
 
+  getRecommendedEvents: () => {
+    const { events, joinedIds } = get();
+    
+    // Get categories of events user has joined
+    const joinedEvents = events.filter((e) => joinedIds.includes(e.id));
+    const preferredCategories = [...new Set(joinedEvents.map((e) => e.category))];
+    
+    // If user hasn't joined any events, return empty array
+    if (preferredCategories.length === 0) return [];
+    
+    // Find events in preferred categories that user hasn't joined yet
+    const recommended = events.filter(
+      (e) => preferredCategories.includes(e.category) && !joinedIds.includes(e.id)
+    );
+    
+    // Sort by available spots (events with more spots first) and limit to 6
+    return recommended
+      .sort((a, b) => (b.maxSlots - b.joined) - (a.maxSlots - a.joined))
+      .slice(0, 6);
+  },
+
   displayToast: (message) => {
     set({ toastMessage: message, showToast: true });
     setTimeout(() => {
