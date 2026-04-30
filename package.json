@@ -10,21 +10,22 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "date-fns": "^3.3.0",
+    "framer-motion": "^11.0.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.344.0",
+    "maplibre-gl": "^5.24.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.0",
-    "zustand": "^4.5.0",
-    "framer-motion": "^11.0.0",
-    "react-toastify": "^10.0.0",
-    "leaflet": "^1.9.4",
     "react-leaflet": "^4.2.1",
-    "lucide-react": "^0.344.0",
-    "date-fns": "^3.3.0"
+    "react-router-dom": "^6.22.0",
+    "react-toastify": "^10.0.0",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.8",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "@types/leaflet": "^1.9.8",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react": "^4.2.1",

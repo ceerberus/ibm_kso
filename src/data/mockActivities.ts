@@ -1,17 +1,11 @@
-/**
- * Mock activity data with realistic Swiss activities
- * Following best practices: comprehensive data, proper typing, realistic scenarios
- */
-
 import { Activity } from '@/types';
-import { mockUsers } from './mockUsers';
-import { getRandomUsers } from './mockUsers';
+import { mockUsers, currentUser, getRandomUsers } from './mockUsers';
 
 export const mockActivities: Activity[] = [
   {
     id: 1,
     title: 'SBB Group Ticket to Interlaken',
-    description: 'Looking for 5 people to share a group ticket to Interlaken for hiking. The group discount saves us 40% compared to regular tickets! We\'ll meet at Zurich HB and travel together. Perfect for a day trip to explore the beautiful Bernese Oberland.',
+    description: 'Looking for people to share a group ticket to Interlaken for hiking. The group discount saves us 40% compared to regular tickets! We\'ll meet at Zurich HB and travel together. Perfect for a day trip to explore the beautiful Bernese Oberland.',
     type: 'travel',
     location: 'Zurich HB to Interlaken Ost',
     city: 'Zurich',
@@ -19,38 +13,54 @@ export const mockActivities: Activity[] = [
     longitude: 8.5417,
     date: '2026-05-15',
     time: '09:00',
+    imageUrl: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80',
     totalSpots: 6,
-    spotsTaken: 2,
+    spotsTaken: 3,
     pricePerPerson: 35,
     regularPrice: 58,
     groupDiscountInfo: 'SBB Gruppenbillett - 40% discount for groups of 6+',
     status: 'open',
     creatorId: 1,
     creator: mockUsers[0],
-    participants: [mockUsers[0], mockUsers[1]],
-    comments: [
+    participants: [mockUsers[0], mockUsers[1], currentUser],
+    pendingRequests: [],
+    chatMessages: [
       {
         id: 1,
         activityId: 1,
-        userId: 2,
-        userName: 'Marco Rossi',
-        userAvatar: mockUsers[1].avatar,
-        content: 'Perfect! I\'ve been wanting to visit Interlaken. What time should we be back?',
+        userId: 1,
+        userName: 'Anna Mueller',
+        content: 'Hey everyone! Super excited for this trip. We\'ll meet at track 7 at 08:45.',
         timestamp: '2026-04-29T10:30:00Z',
       },
       {
         id: 2,
         activityId: 1,
+        userId: 2,
+        userName: 'Marco Rossi',
+        content: 'Perfect! I\'ll bring snacks for the train ride 🎒',
+        timestamp: '2026-04-29T11:00:00Z',
+      },
+      {
+        id: 3,
+        activityId: 1,
+        userId: 100,
+        userName: 'Demo User',
+        content: 'Amazing, see you all there! Should we plan a specific hiking trail?',
+        timestamp: '2026-04-29T11:20:00Z',
+      },
+      {
+        id: 4,
+        activityId: 1,
         userId: 1,
         userName: 'Anna Mueller',
-        userAvatar: mockUsers[0].avatar,
-        content: 'We should be back by 19:00. Plenty of time for hiking and sightseeing!',
-        timestamp: '2026-04-29T11:15:00Z',
+        content: 'The Harder Kulm trail is great for day trips. About 3 hours round trip.',
+        timestamp: '2026-04-29T11:35:00Z',
       },
     ],
     viewCount: 45,
     createdAt: '2026-04-28T14:20:00Z',
-    updatedAt: '2026-04-29T11:15:00Z',
+    updatedAt: '2026-04-29T11:35:00Z',
   },
   {
     id: 2,
@@ -63,6 +73,7 @@ export const mockActivities: Activity[] = [
     longitude: 6.2333,
     date: '2026-07-20',
     time: '18:00',
+    imageUrl: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80',
     totalSpots: 8,
     spotsTaken: 3,
     pricePerPerson: 85,
@@ -72,13 +83,21 @@ export const mockActivities: Activity[] = [
     creatorId: 3,
     creator: mockUsers[2],
     participants: [mockUsers[2], mockUsers[3], mockUsers[4]],
-    comments: [
+    pendingRequests: [],
+    chatMessages: [
       {
-        id: 3,
+        id: 1,
+        activityId: 2,
+        userId: 3,
+        userName: 'Sophie Dubois',
+        content: 'Welcome to the Paléo group! I\'ll share the ticket details once we\'re full.',
+        timestamp: '2026-04-27T10:00:00Z',
+      },
+      {
+        id: 2,
         activityId: 2,
         userId: 4,
         userName: 'Luca Bianchi',
-        userAvatar: mockUsers[3].avatar,
         content: 'The lineup looks incredible this year! Can\'t wait!',
         timestamp: '2026-04-28T16:20:00Z',
       },
@@ -97,6 +116,7 @@ export const mockActivities: Activity[] = [
     longitude: 7.5886,
     date: '2026-05-10',
     time: '19:30',
+    imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80',
     totalSpots: 10,
     spotsTaken: 7,
     pricePerPerson: 42,
@@ -106,17 +126,8 @@ export const mockActivities: Activity[] = [
     creatorId: 6,
     creator: mockUsers[5],
     participants: getRandomUsers(7, [6]),
-    comments: [
-      {
-        id: 4,
-        activityId: 3,
-        userId: 7,
-        userName: 'Nina Schneider',
-        userAvatar: mockUsers[6].avatar,
-        content: 'This is going to be an amazing match! Only 3 spots left!',
-        timestamp: '2026-04-29T15:45:00Z',
-      },
-    ],
+    pendingRequests: [],
+    chatMessages: [],
     viewCount: 203,
     createdAt: '2026-04-26T11:00:00Z',
   },
@@ -131,6 +142,7 @@ export const mockActivities: Activity[] = [
     longitude: 7.4474,
     date: '2026-05-22',
     time: '08:30',
+    imageUrl: 'https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=800&q=80',
     totalSpots: 8,
     spotsTaken: 4,
     pricePerPerson: 95,
@@ -140,7 +152,8 @@ export const mockActivities: Activity[] = [
     creatorId: 5,
     creator: mockUsers[4],
     participants: getRandomUsers(4, [5]),
-    comments: [],
+    pendingRequests: [],
+    chatMessages: [],
     viewCount: 89,
     createdAt: '2026-04-29T08:00:00Z',
   },
@@ -155,6 +168,7 @@ export const mockActivities: Activity[] = [
     longitude: 8.5417,
     date: '2026-09-24',
     time: '19:00',
+    imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80',
     totalSpots: 12,
     spotsTaken: 5,
     pricePerPerson: 65,
@@ -164,17 +178,8 @@ export const mockActivities: Activity[] = [
     creatorId: 7,
     creator: mockUsers[6],
     participants: getRandomUsers(5, [7]),
-    comments: [
-      {
-        id: 5,
-        activityId: 5,
-        userId: 1,
-        userName: 'Anna Mueller',
-        userAvatar: mockUsers[0].avatar,
-        content: 'I heard there will be some big Hollywood stars attending!',
-        timestamp: '2026-04-29T12:30:00Z',
-      },
-    ],
+    pendingRequests: [],
+    chatMessages: [],
     viewCount: 67,
     createdAt: '2026-04-29T10:45:00Z',
   },
@@ -189,6 +194,7 @@ export const mockActivities: Activity[] = [
     longitude: 6.6323,
     date: '2026-07-10',
     time: '17:00',
+    imageUrl: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80',
     totalSpots: 6,
     spotsTaken: 6,
     pricePerPerson: 120,
@@ -198,17 +204,8 @@ export const mockActivities: Activity[] = [
     creatorId: 8,
     creator: mockUsers[7],
     participants: getRandomUsers(6, [8]),
-    comments: [
-      {
-        id: 6,
-        activityId: 6,
-        userId: 3,
-        userName: 'Sophie Dubois',
-        userAvatar: mockUsers[2].avatar,
-        content: 'So excited! This festival is legendary!',
-        timestamp: '2026-04-28T14:20:00Z',
-      },
-    ],
+    pendingRequests: [],
+    chatMessages: [],
     viewCount: 156,
     createdAt: '2026-04-25T13:30:00Z',
   },
@@ -223,6 +220,7 @@ export const mockActivities: Activity[] = [
     longitude: 8.5417,
     date: '2026-05-18',
     time: '10:00',
+    imageUrl: 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&q=80',
     totalSpots: 10,
     spotsTaken: 3,
     pricePerPerson: 45,
@@ -232,7 +230,8 @@ export const mockActivities: Activity[] = [
     creatorId: 2,
     creator: mockUsers[1],
     participants: getRandomUsers(3, [2]),
-    comments: [],
+    pendingRequests: [],
+    chatMessages: [],
     viewCount: 34,
     createdAt: '2026-04-29T16:00:00Z',
   },
@@ -247,6 +246,7 @@ export const mockActivities: Activity[] = [
     longitude: 6.1432,
     date: '2026-05-08',
     time: '18:30',
+    imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
     totalSpots: 6,
     spotsTaken: 4,
     pricePerPerson: 35,
@@ -256,39 +256,78 @@ export const mockActivities: Activity[] = [
     creatorId: 3,
     creator: mockUsers[2],
     participants: getRandomUsers(4, [3]),
-    comments: [
-      {
-        id: 7,
-        activityId: 8,
-        userId: 5,
-        userName: 'Emma Keller',
-        userAvatar: mockUsers[4].avatar,
-        content: 'I love escape rooms! Count me in!',
-        timestamp: '2026-04-29T17:15:00Z',
-      },
-    ],
+    pendingRequests: [],
+    chatMessages: [],
     viewCount: 52,
     createdAt: '2026-04-28T19:30:00Z',
   },
+  {
+    id: 9,
+    title: 'Swiss Museum Night - Basel',
+    description: 'Lange Nacht der Museen! Over 30 museums open until midnight with a single group ticket. We\'ll make a plan to hit the best spots — Kunstmuseum, Natural History Museum, and more. A really unique Basel experience.',
+    type: 'event',
+    location: 'Various museums, Basel',
+    city: 'Basel',
+    latitude: 47.5596,
+    longitude: 7.5886,
+    date: '2026-05-17',
+    time: '18:00',
+    imageUrl: 'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=800&q=80',
+    totalSpots: 8,
+    spotsTaken: 1,
+    pricePerPerson: 28,
+    regularPrice: 40,
+    groupDiscountInfo: 'Museum Night group ticket - 30% off',
+    status: 'open',
+    creatorId: 100,
+    creator: currentUser,
+    participants: [currentUser],
+    pendingRequests: [
+      {
+        id: 1,
+        activityId: 9,
+        userId: 2,
+        user: mockUsers[1],
+        message: 'Big museum fan here! Would love to join your group for the night.',
+        requestedAt: '2026-04-30T08:15:00Z',
+      },
+      {
+        id: 2,
+        activityId: 9,
+        userId: 4,
+        user: mockUsers[3],
+        message: 'I\'ve been wanting to do this for years. Count me in!',
+        requestedAt: '2026-04-30T09:40:00Z',
+      },
+      {
+        id: 3,
+        activityId: 9,
+        userId: 7,
+        user: mockUsers[6],
+        message: '',
+        requestedAt: '2026-04-30T10:05:00Z',
+      },
+    ],
+    chatMessages: [
+      {
+        id: 1,
+        activityId: 9,
+        userId: 100,
+        userName: 'Demo User',
+        content: 'Welcome everyone! I\'ll share the final museum route once we\'re all confirmed.',
+        timestamp: '2026-04-30T07:00:00Z',
+      },
+    ],
+    viewCount: 12,
+    createdAt: '2026-04-30T07:00:00Z',
+  },
 ];
 
-// Helper function to get activities by city
-export const getActivitiesByCity = (city: string): Activity[] => {
-  return mockActivities.filter(activity => 
-    activity.city.toLowerCase() === city.toLowerCase()
-  );
-};
+export const getActivitiesByCity = (city: string): Activity[] =>
+  mockActivities.filter(a => a.city.toLowerCase() === city.toLowerCase());
 
-// Helper function to get activities by type
-export const getActivitiesByType = (type: string): Activity[] => {
-  return mockActivities.filter(activity => activity.type === type);
-};
+export const getActivitiesByType = (type: string): Activity[] =>
+  mockActivities.filter(a => a.type === type);
 
-// Helper function to get open activities
-export const getOpenActivities = (): Activity[] => {
-  return mockActivities.filter(activity => 
-    activity.status === 'open' || activity.status === 'filling_fast'
-  );
-};
-
-// Made with Bob
+export const getOpenActivities = (): Activity[] =>
+  mockActivities.filter(a => a.status === 'open' || a.status === 'filling_fast');

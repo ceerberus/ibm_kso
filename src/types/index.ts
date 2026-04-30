@@ -23,6 +23,7 @@ export interface User {
 export interface CurrentUser extends User {
   joinedActivities: number[];
   createdActivities: number[];
+  savedActivities: number[];
 }
 
 // ============================================================================
@@ -43,6 +44,7 @@ export interface Activity {
   longitude?: number;
   date: string;
   time?: string;
+  imageUrl?: string;
   totalSpots: number;
   spotsTaken: number;
   pricePerPerson?: number;
@@ -52,7 +54,8 @@ export interface Activity {
   creatorId: number;
   creator: User;
   participants: User[];
-  comments: Comment[];
+  pendingRequests: JoinRequest[];
+  chatMessages: ChatMessage[];
   viewCount: number;
   createdAt: string;
   updatedAt?: string;
@@ -68,6 +71,7 @@ export interface CreateActivityInput {
   longitude?: number;
   date: string;
   time?: string;
+  imageUrl?: string;
   totalSpots: number;
   pricePerPerson?: number;
   regularPrice?: number;
@@ -75,32 +79,39 @@ export interface CreateActivityInput {
 }
 
 // ============================================================================
-// Comment Types
+// Join Request Types
 // ============================================================================
 
-export interface Comment {
+export interface JoinRequest {
+  id: number;
+  activityId: number;
+  userId: number;
+  user: User;
+  message?: string;
+  requestedAt: string;
+}
+
+// ============================================================================
+// Group Chat Types
+// ============================================================================
+
+export interface ChatMessage {
   id: number;
   activityId: number;
   userId: number;
   userName: string;
-  userAvatar?: string;
   content: string;
   timestamp: string;
-}
-
-export interface CreateCommentInput {
-  activityId: number;
-  content: string;
 }
 
 // ============================================================================
 // Notification Types
 // ============================================================================
 
-export type NotificationType = 
-  | 'join_request' 
-  | 'request_accepted' 
-  | 'new_comment' 
+export type NotificationType =
+  | 'join_request'
+  | 'request_accepted'
+  | 'request_rejected'
   | 'activity_full'
   | 'activity_created'
   | 'spot_taken';
@@ -156,15 +167,18 @@ export interface ActivityStore {
   sortBy: SortOption;
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   setActivities: (activities: Activity[]) => void;
   addActivity: (activity: CreateActivityInput) => void;
   updateActivity: (id: number, updates: Partial<Activity>) => void;
   deleteActivity: (id: number) => void;
-  joinActivity: (activityId: number) => void;
+  requestJoin: (activityId: number, message?: string) => void;
+  cancelJoinRequest: (activityId: number) => void;
+  approveRequest: (activityId: number, userId: number) => void;
+  rejectRequest: (activityId: number, userId: number) => void;
   leaveActivity: (activityId: number) => void;
-  addComment: (activityId: number, comment: string) => void;
+  sendChatMessage: (activityId: number, content: string) => void;
   setFilters: (filters: Partial<ActivityFilters>) => void;
   setSortBy: (sortBy: SortOption) => void;
   applyFilters: () => void;
@@ -180,6 +194,9 @@ export interface UserStore {
   setCurrentUser: (user: CurrentUser) => void;
   updateProfile: (updates: Partial<CurrentUser>) => void;
   logout: () => void;
+  saveActivity: (activityId: number) => void;
+  unsaveActivity: (activityId: number) => void;
+  isActivitySaved: (activityId: number) => boolean;
 }
 
 export interface NotificationStore {

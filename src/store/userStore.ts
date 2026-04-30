@@ -5,12 +5,12 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { UserStore, CurrentUser } from '@/types';
+import { UserStore } from '@/types';
 import { currentUser as defaultUser } from '@/data/mockUsers';
 
 export const useUserStore = create<UserStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       currentUser: defaultUser,
       isAuthenticated: true,
 
@@ -28,6 +28,42 @@ export const useUserStore = create<UserStore>()(
 
       logout: () => {
         set({ currentUser: null, isAuthenticated: false });
+      },
+
+      saveActivity: (activityId) => {
+        set((state) => {
+          if (!state.currentUser) return state;
+          const savedActivities = state.currentUser.savedActivities || [];
+          if (savedActivities.includes(activityId)) return state;
+          
+          return {
+            currentUser: {
+              ...state.currentUser,
+              savedActivities: [...savedActivities, activityId],
+            },
+          };
+        });
+      },
+
+      unsaveActivity: (activityId) => {
+        set((state) => {
+          if (!state.currentUser) return state;
+          const savedActivities = state.currentUser.savedActivities || [];
+          
+          return {
+            currentUser: {
+              ...state.currentUser,
+              savedActivities: savedActivities.filter((id) => id !== activityId),
+            },
+          };
+        });
+      },
+
+      isActivitySaved: (activityId) => {
+        const state = get();
+        if (!state.currentUser) return false;
+        const savedActivities = state.currentUser.savedActivities || [];
+        return savedActivities.includes(activityId);
       },
     }),
     {

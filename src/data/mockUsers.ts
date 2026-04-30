@@ -113,6 +113,7 @@ export const currentUser: CurrentUser = {
   createdAt: '2026-04-01T08:00:00Z',
   joinedActivities: [],
   createdActivities: [],
+  savedActivities: [],
 };
 
 // Helper function to get random users

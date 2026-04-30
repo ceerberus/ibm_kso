@@ -1,10 +1,5 @@
-/**
- * Activity Store using Zustand
- * Following best practices: immutable updates, clear actions, proper typing
- */
-
 import { create } from 'zustand';
-import { ActivityStore, Activity, CreateActivityInput, ActivityFilters, SortOption } from '@/types';
+import { ActivityStore, Activity, CreateActivityInput } from '@/types';
 import { mockActivities } from '@/data/mockActivities';
 import { currentUser } from '@/data/mockUsers';
 
@@ -29,137 +24,150 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
       creatorId: currentUser.id,
       creator: currentUser,
       participants: [currentUser],
-      comments: [],
+      pendingRequests: [],
+      chatMessages: [],
       viewCount: 0,
       createdAt: new Date().toISOString(),
     };
 
     set((state) => {
-      const updatedActivities = [newActivity, ...state.activities];
-      return {
-        activities: updatedActivities,
-        filteredActivities: updatedActivities,
-      };
+      const updated = [newActivity, ...state.activities];
+      return { activities: updated, filteredActivities: updated };
     });
 
-    // Trigger filter reapplication
     get().applyFilters();
   },
 
   updateActivity: (id, updates) => {
     set((state) => {
-      const updatedActivities = state.activities.map((activity) =>
-        activity.id === id
-          ? { ...activity, ...updates, updatedAt: new Date().toISOString() }
-          : activity
+      const updated = state.activities.map((a) =>
+        a.id === id ? { ...a, ...updates, updatedAt: new Date().toISOString() } : a
       );
-      return {
-        activities: updatedActivities,
-        filteredActivities: updatedActivities,
-      };
+      return { activities: updated, filteredActivities: updated };
     });
     get().applyFilters();
   },
 
   deleteActivity: (id) => {
     set((state) => {
-      const updatedActivities = state.activities.filter((activity) => activity.id !== id);
-      return {
-        activities: updatedActivities,
-        filteredActivities: updatedActivities,
-      };
+      const updated = state.activities.filter((a) => a.id !== id);
+      return { activities: updated, filteredActivities: updated };
     });
   },
 
-  joinActivity: (activityId) => {
+  requestJoin: (activityId, message) => {
     set((state) => {
-      const updatedActivities = state.activities.map((activity) => {
-        if (activity.id === activityId) {
-          const newSpotsTaken = activity.spotsTaken + 1;
-          const isAlmostFull = newSpotsTaken >= activity.totalSpots * 0.8;
-          const isFull = newSpotsTaken >= activity.totalSpots;
+      const updated = state.activities.map((activity) => {
+        if (activity.id !== activityId) return activity;
+        const alreadyRequested = activity.pendingRequests.some((r) => r.userId === currentUser.id);
+        const alreadyJoined = activity.participants.some((p) => p.id === currentUser.id);
+        if (alreadyRequested || alreadyJoined) return activity;
 
-          return {
-            ...activity,
-            spotsTaken: newSpotsTaken,
-            participants: [...activity.participants, currentUser],
-            status: isFull ? 'full' : isAlmostFull ? 'filling_fast' : 'open',
-            updatedAt: new Date().toISOString(),
-          };
-        }
-        return activity;
+        const newRequest = {
+          id: Date.now(),
+          activityId,
+          userId: currentUser.id,
+          user: currentUser,
+          message: message ?? '',
+          requestedAt: new Date().toISOString(),
+        };
+
+        return { ...activity, pendingRequests: [...activity.pendingRequests, newRequest] };
       });
+      return { activities: updated, filteredActivities: updated };
+    });
+  },
 
-      return {
-        activities: updatedActivities,
-        filteredActivities: updatedActivities,
-      };
+  cancelJoinRequest: (activityId) => {
+    set((state) => {
+      const updated = state.activities.map((activity) => {
+        if (activity.id !== activityId) return activity;
+        return {
+          ...activity,
+          pendingRequests: activity.pendingRequests.filter((r) => r.userId !== currentUser.id),
+        };
+      });
+      return { activities: updated, filteredActivities: updated };
+    });
+  },
+
+  approveRequest: (activityId, userId) => {
+    set((state) => {
+      const updated = state.activities.map((activity) => {
+        if (activity.id !== activityId) return activity;
+        const request = activity.pendingRequests.find((r) => r.userId === userId);
+        if (!request) return activity;
+
+        const newSpotsTaken = activity.spotsTaken + 1;
+        const isFull = newSpotsTaken >= activity.totalSpots;
+        const isAlmostFull = newSpotsTaken >= activity.totalSpots * 0.8;
+        const newStatus = (isFull ? 'full' : isAlmostFull ? 'filling_fast' : 'open') as Activity['status'];
+
+        return {
+          ...activity,
+          spotsTaken: newSpotsTaken,
+          participants: [...activity.participants, request.user],
+          pendingRequests: activity.pendingRequests.filter((r) => r.userId !== userId),
+          status: newStatus,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+      return { activities: updated, filteredActivities: updated };
     });
     get().applyFilters();
+  },
+
+  rejectRequest: (activityId, userId) => {
+    set((state) => {
+      const updated = state.activities.map((activity) => {
+        if (activity.id !== activityId) return activity;
+        return {
+          ...activity,
+          pendingRequests: activity.pendingRequests.filter((r) => r.userId !== userId),
+        };
+      });
+      return { activities: updated, filteredActivities: updated };
+    });
   },
 
   leaveActivity: (activityId) => {
     set((state) => {
-      const updatedActivities = state.activities.map((activity) => {
-        if (activity.id === activityId) {
-          const newSpotsTaken = Math.max(1, activity.spotsTaken - 1);
-          const participants = activity.participants.filter(
-            (p) => p.id !== currentUser.id
-          );
-
-          return {
-            ...activity,
-            spotsTaken: newSpotsTaken,
-            participants,
-            status: 'open',
-            updatedAt: new Date().toISOString(),
-          };
-        }
-        return activity;
+      const updated = state.activities.map((activity) => {
+        if (activity.id !== activityId) return activity;
+        const newSpotsTaken = Math.max(1, activity.spotsTaken - 1);
+        return {
+          ...activity,
+          spotsTaken: newSpotsTaken,
+          participants: activity.participants.filter((p) => p.id !== currentUser.id),
+          status: 'open' as const,
+          updatedAt: new Date().toISOString(),
+        };
       });
-
-      return {
-        activities: updatedActivities,
-        filteredActivities: updatedActivities,
-      };
+      return { activities: updated, filteredActivities: updated };
     });
     get().applyFilters();
   },
 
-  addComment: (activityId, content) => {
+  sendChatMessage: (activityId, content) => {
     set((state) => {
-      const updatedActivities = state.activities.map((activity) => {
-        if (activity.id === activityId) {
-          const newComment = {
-            id: Date.now(),
-            activityId,
-            userId: currentUser.id,
-            userName: `${currentUser.firstName} ${currentUser.lastName}`,
-            userAvatar: currentUser.avatar,
-            content,
-            timestamp: new Date().toISOString(),
-          };
-
-          return {
-            ...activity,
-            comments: [...activity.comments, newComment],
-            updatedAt: new Date().toISOString(),
-          };
-        }
-        return activity;
+      const updated = state.activities.map((activity) => {
+        if (activity.id !== activityId) return activity;
+        const msg = {
+          id: Date.now(),
+          activityId,
+          userId: currentUser.id,
+          userName: `${currentUser.firstName} ${currentUser.lastName}`,
+          content,
+          timestamp: new Date().toISOString(),
+        };
+        return { ...activity, chatMessages: [...activity.chatMessages, msg] };
       });
-
-      return {
-        activities: updatedActivities,
-        filteredActivities: updatedActivities,
-      };
+      return { activities: updated, filteredActivities: updated };
     });
   },
 
   setFilters: (newFilters) => {
-    set((state) => ({
-      filters: { ...state.filters, ...newFilters },
-    }));
+    set((state) => ({ filters: { ...state.filters, ...newFilters } }));
     get().applyFilters();
   },
 
@@ -170,39 +178,30 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
 
   applyFilters: () => {
     const { activities, filters, sortBy } = get();
-    
     let filtered = [...activities];
 
-    // Apply filters
     if (filters.city) {
-      filtered = filtered.filter(
-        (activity) => activity.city.toLowerCase() === filters.city!.toLowerCase()
-      );
+      filtered = filtered.filter((a) => a.city.toLowerCase() === filters.city!.toLowerCase());
     }
-
     if (filters.type) {
-      filtered = filtered.filter((activity) => activity.type === filters.type);
+      filtered = filtered.filter((a) => a.type === filters.type);
     }
-
     if (filters.date) {
-      filtered = filtered.filter((activity) => activity.date === filters.date);
+      filtered = filtered.filter((a) => a.date === filters.date);
     }
-
     if (filters.status) {
-      filtered = filtered.filter((activity) => activity.status === filters.status);
+      filtered = filtered.filter((a) => a.status === filters.status);
     }
-
     if (filters.search) {
-      const searchLower = filters.search.toLowerCase();
+      const q = filters.search.toLowerCase();
       filtered = filtered.filter(
-        (activity) =>
-          activity.title.toLowerCase().includes(searchLower) ||
-          activity.description.toLowerCase().includes(searchLower) ||
-          activity.location.toLowerCase().includes(searchLower)
+        (a) =>
+          a.title.toLowerCase().includes(q) ||
+          a.description.toLowerCase().includes(q) ||
+          a.location.toLowerCase().includes(q)
       );
     }
 
-    // Apply sorting
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'newest':
@@ -223,23 +222,14 @@ export const useActivityStore = create<ActivityStore>((set, get) => ({
     set({ filteredActivities: filtered });
   },
 
-  getActivityById: (id) => {
-    return get().activities.find((activity) => activity.id === id);
-  },
+  getActivityById: (id) => get().activities.find((a) => a.id === id),
 
   incrementViewCount: (id) => {
     set((state) => {
-      const updatedActivities = state.activities.map((activity) =>
-        activity.id === id
-          ? { ...activity, viewCount: activity.viewCount + 1 }
-          : activity
+      const updated = state.activities.map((a) =>
+        a.id === id ? { ...a, viewCount: a.viewCount + 1 } : a
       );
-      return {
-        activities: updatedActivities,
-        filteredActivities: updatedActivities,
-      };
+      return { activities: updated, filteredActivities: updated };
     });
   },
 }));
-
-// Made with Bob
