@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { Event } from '../types';
 import { useEventStore } from '../store/eventStore';
-import { CATEGORIES } from '../data/mockEvents';
+//import { CATEGORIES } from '../data/mockEvents';
 import AddressInput from './AddressInput';
 import { geocodeAddress } from '../utils/geocoding';
 
