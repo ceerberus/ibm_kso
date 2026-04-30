@@ -1,0 +1,137 @@
+import { Event, Category } from '../types';
+
+export const CATEGORIES: Category[] = [
+  { id: 'all', label: 'All', emoji: '✦' },
+  { id: 'hiking', label: 'Hiking', emoji: '🥾' },
+  { id: 'cycling', label: 'Cycling', emoji: '🚴' },
+  { id: 'running', label: 'Running', emoji: '👟' },
+  { id: 'party', label: 'Party', emoji: '🎉' },
+  { id: 'cinema', label: 'Cinema', emoji: '🎬' },
+  { id: 'cooking', label: 'Cooking', emoji: '🍳' },
+  { id: 'climbing', label: 'Climbing', emoji: '🧗' },
+  { id: 'picnic', label: 'Picnic', emoji: '🧺' },
+];
+
+export const COLORS = [
+  '#6366F1', // Indigo
+  '#0EA5E9', // Sky blue
+  '#10B981', // Green
+  '#F59E0B', // Amber
+  '#EC4899', // Pink
+  '#F97316', // Orange
+  '#8B5CF6', // Purple
+  '#14B8A6', // Teal
+];
+
+export const INITIAL_EVENTS: Event[] = [
+  {
+    id: 1,
+    title: 'Uetliberg Sunrise Hike',
+    category: 'hiking',
+    emoji: '🥾',
+    date: 'Sat, 8 Mar',
+    time: '06:30',
+    location: 'Uetliberg',
+    lat: 47.3531,
+    lng: 8.4915,
+    host: 'Lena B.',
+    hostInitials: 'LB',
+    maxSlots: 6,
+    joined: 3,
+    description: 'Early morning hike up Uetliberg for sunrise views over the city and lake. Bring warm clothes and a headlamp!',
+    color: '#6366F1',
+    isNew: false,
+  },
+  {
+    id: 2,
+    title: 'Lake Zurich Morning Run',
+    category: 'running',
+    emoji: '👟',
+    date: 'Sun, 9 Mar',
+    time: '08:00',
+    location: 'Strandbad Mythenquai',
+    lat: 47.3533,
+    lng: 8.5397,
+    host: 'Tim R.',
+    hostInitials: 'TR',
+    maxSlots: 8,
+    joined: 5,
+    description: 'Jog along the lake, 5km easy pace. Perfect for beginners and experienced runners alike.',
+    color: '#0EA5E9',
+    isNew: false,
+  },
+  {
+    id: 3,
+    title: 'Altstadt Food Tour',
+    category: 'cooking',
+    emoji: '🍳',
+    date: 'Fri, 7 Mar',
+    time: '18:00',
+    location: 'Niederdorf',
+    lat: 47.3729,
+    lng: 8.5430,
+    host: 'Sara M.',
+    hostInitials: 'SM',
+    maxSlots: 6,
+    joined: 5,
+    description: 'Street food crawl through the old town. 5 different spots! Bring your appetite and CHF 30.',
+    color: '#EC4899',
+    isNew: false,
+  },
+  {
+    id: 4,
+    title: 'Friday Rooftop Party',
+    category: 'party',
+    emoji: '🎉',
+    date: 'Fri, 7 Mar',
+    time: '21:00',
+    location: 'Zürich West',
+    lat: 47.3839,
+    lng: 8.5187,
+    host: 'Max K.',
+    hostInitials: 'MK',
+    maxSlots: 25,
+    joined: 17,
+    description: 'Rooftop party in Züri West. BYOB, good vibes only. DJ spinning house and techno.',
+    color: '#F59E0B',
+    isNew: false,
+  },
+  {
+    id: 5,
+    title: 'Cycling to Rapperswil',
+    category: 'cycling',
+    emoji: '🚴',
+    date: 'Sat, 8 Mar',
+    time: '09:00',
+    location: 'Bürkliplatz',
+    lat: 47.3659,
+    lng: 8.5414,
+    host: 'Felix W.',
+    hostInitials: 'FW',
+    maxSlots: 5,
+    joined: 2,
+    description: '50km round trip along the lake. Coffee stop included. Moderate pace, bring your own bike.',
+    color: '#10B981',
+    isNew: false,
+  },
+  {
+    id: 6,
+    title: 'Climbing Session',
+    category: 'climbing',
+    emoji: '🧗',
+    date: 'Wed, 5 Mar',
+    time: '17:30',
+    location: 'Kletterhalle Zürich',
+    lat: 47.4001,
+    lng: 8.5351,
+    host: 'Mia L.',
+    hostInitials: 'ML',
+    maxSlots: 4,
+    joined: 1,
+    description: 'Bouldering for all levels. Shoes available for rent. Great way to meet new people!',
+    color: '#F97316',
+    isNew: false,
+  },
+];
+
+// Made with Bob

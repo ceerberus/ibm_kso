@@ -1,0 +1,411 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.app{font-family:'DM Sans',sans-serif;background:#F0F4FF;min-height:620px;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;}
+.topbar{background:#fff;border-bottom:1px solid #E2E8F0;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#0F172A;}
+.nav{display:flex;gap:4px;}
+.nbtn{padding:6px 14px;border-radius:999px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#64748B;font-family:'DM Sans',sans-serif;}
+.nbtn.active{background:#EFF6FF;color:#0EA5E9;}
+.urow{display:flex;align-items:center;gap:8px;}
+.uav{width:32px;height:32px;border-radius:50%;background:#0F172A;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;}
+.body{display:flex;flex:1;min-height:0;}
+.sidebar{width:190px;background:#fff;border-right:1px solid #E2E8F0;padding:14px 10px;flex-shrink:0;}
+.stitle{font-size:10px;font-weight:700;color:#94A3B8;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;padding:0 6px;font-family:'Syne',sans-serif;}
+.cat{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;cursor:pointer;margin-bottom:1px;transition:background 0.12s;}
+.cat:hover{background:#F8FAFC;}
+.cat.active{background:#EFF6FF;}
+.cat-lbl{font-size:13px;color:#475569;font-weight:500;}
+.cat.active .cat-lbl{color:#0EA5E9;}
+.main{flex:1;padding:18px 22px;overflow-y:auto;}
+.mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.mtitle{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#0F172A;}
+.msub{font-size:12px;color:#94A3B8;margin-top:1px;}
+.vt{display:flex;gap:3px;background:#F1F5F9;border-radius:8px;padding:3px;}
+.vbtn{padding:4px 11px;border-radius:6px;border:none;background:transparent;font-size:12px;font-weight:500;color:#64748B;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.vbtn.active{background:#fff;color:#0F172A;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px;}
+.card{background:#fff;border-radius:13px;border:1.5px solid #E2E8F0;padding:13px;cursor:pointer;transition:all 0.18s;}
+.card:hover{border-color:#BAE6FD;transform:translateY(-1px);}
+.card.new-card{border-color:#10B981;animation:newpop 0.4s ease;}
+@keyframes newpop{0%{transform:scale(0.95);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.ctop{display:flex;gap:10px;margin-bottom:9px;}
+.cicon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.ctitle{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#0F172A;line-height:1.3;}
+.cmeta{font-size:11px;color:#64748B;margin-top:3px;line-height:1.6;}
+.cbot{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid #F1F5F9;}
+.hrow{display:flex;align-items:center;}
+.hav{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;}
+.hname{font-size:11px;color:#94A3B8;margin-left:5px;}
+.slots{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;transition:all 0.2s;}
+.mapwrap{border-radius:11px;overflow:hidden;border:1.5px solid #E2E8F0;}
+.modal-bg{min-height:500px;background:rgba(15,23,42,0.38);display:flex;align-items:flex-end;justify-content:center;border-radius:16px;}
+.modal{background:#fff;border-radius:16px 16px 0 0;width:100%;padding:16px 20px 22px;position:relative;}
+.mhandle{width:28px;height:3px;background:#E2E8F0;border-radius:99px;margin:0 auto 12px;}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0;}
+.minfo{padding:8px 10px;background:#F8FAFC;border-radius:9px;}
+.mival{font-size:13px;font-weight:600;color:#0F172A;}
+.mikey{font-size:11px;color:#94A3B8;margin-top:1px;}
+.joinbtn{width:100%;padding:12px;border-radius:11px;color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;border:none;cursor:pointer;margin-top:11px;transition:all 0.2s;}
+.xbtn{position:absolute;top:13px;right:15px;width:25px;height:25px;border-radius:50%;background:#F1F5F9;border:none;cursor:pointer;font-size:13px;color:#64748B;}
+.toast-wrap{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:50;pointer-events:none;}
+.toast{background:#0F172A;color:#fff;padding:7px 15px;border-radius:999px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.formlabel{font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:5px;font-family:'Syne',sans-serif;}
+.forminput{width:100%;padding:9px 12px;border-radius:9px;border:1.5px solid #E2E8F0;font-size:13px;outline:none;font-family:'DM Sans',sans-serif;color:#0F172A;background:#FAFAFA;}
+.forminput:focus{border-color:#0EA5E9;background:#fff;}
+.pubbtn{width:100%;padding:12px;border-radius:11px;background:#0F172A;color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;border:none;cursor:pointer;transition:opacity 0.2s;}
+.pubBtn:hover{opacity:0.85;}
+.new-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#DCFCE7;color:#16A34A;margin-left:6px;vertical-align:middle;}
+</style>
+
+<h2 class="sr-only">Dynamic event discovery app for Zurich with live join counts and event creation</h2>
+
+<div class="app" id="app" style="position:relative;">
+  <div class="topbar">
+    <div class="logo">meetup.</div>
+    <div class="nav">
+      <button class="nbtn active" id="nb-discover" onclick="switchTab('discover')">Discover</button>
+      <button class="nbtn" id="nb-create" onclick="switchTab('create')">+ Create</button>
+      <button class="nbtn" id="nb-profile" onclick="switchTab('profile')">Profile</button>
+    </div>
+    <div class="urow">
+      <span style="font-size:13px;color:#64748B;" id="uname-top">Anna K.</span>
+      <div class="uav" id="uav-top">AK</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="sidebar">
+      <div class="stitle">Categories</div>
+      <div id="cats"></div>
+    </div>
+    <div class="main">
+      <div id="tab-discover">
+        <div class="mhdr">
+          <div>
+            <div class="mtitle">Events in Zurich</div>
+            <div class="msub" id="ecount"></div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <div class="vt">
+              <button class="vbtn active" id="vl" onclick="setView('list')">List</button>
+              <button class="vbtn" id="vm" onclick="setView('map')">Map</button>
+            </div>
+          </div>
+        </div>
+        <div id="list-view"><div class="grid" id="egrid"></div></div>
+        <div id="map-view" style="display:none;">
+          <div class="mapwrap"><div id="map" style="height:370px;"></div></div>
+        </div>
+      </div>
+
+      <div id="tab-create" style="display:none;">
+        <div class="mhdr"><div class="mtitle">Create an event</div></div>
+        <div style="max-width:460px;display:flex;flex-direction:column;gap:13px;">
+          <div>
+            <label class="formlabel">Title *</label>
+            <input class="forminput" placeholder="e.g. Uetliberg Sunrise Hike" id="c-title" />
+          </div>
+          <div>
+            <label class="formlabel">Category *</label>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;" id="c-cats"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <label class="formlabel">Date *</label>
+              <input type="date" class="forminput" id="c-date" />
+            </div>
+            <div>
+              <label class="formlabel">Time *</label>
+              <input type="time" class="forminput" id="c-time" />
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <label class="formlabel">Location *</label>
+              <input class="forminput" placeholder="e.g. Lindenhügel" id="c-loc" />
+            </div>
+            <div>
+              <label class="formlabel">Max. people *</label>
+              <input type="number" class="forminput" placeholder="5" id="c-slots" min="1" max="100" />
+            </div>
+          </div>
+          <div>
+            <label class="formlabel">Description</label>
+            <textarea class="forminput" placeholder="What can people expect?" id="c-desc" style="resize:none;height:70px;"></textarea>
+          </div>
+          <button class="pubBtn" onclick="submitEvent()" style="width:100%;padding:12px;border-radius:11px;background:#0F172A;color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;border:none;cursor:pointer;">Publish event ✦</button>
+        </div>
+      </div>
+
+      <div id="tab-profile" style="display:none;">
+        <div style="max-width:460px;">
+          <div style="display:flex;align-items:center;gap:16px;padding:18px;background:#fff;border-radius:14px;border:1.5px solid #E2E8F0;margin-bottom:12px;">
+            <div style="width:60px;height:60px;border-radius:14px;background:#0F172A;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;flex-shrink:0;" id="pav">AK</div>
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#0F172A;" id="pname">Anna Keller</div>
+              <div style="font-size:13px;color:#64748B;margin-top:2px;">Zurich · 26 years</div>
+              <div style="font-size:13px;color:#475569;margin-top:4px;">Loves hiking and good food 🏔️</div>
+              <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+                <span style="font-size:11px;padding:2px 8px;border-radius:999px;background:#EFF6FF;color:#0284C7;border:1.5px solid #BAE6FD;">Hiking</span>
+                <span style="font-size:11px;padding:2px 8px;border-radius:999px;background:#EFF6FF;color:#0284C7;border:1.5px solid #BAE6FD;">Cycling</span>
+                <span style="font-size:11px;padding:2px 8px;border-radius:999px;background:#EFF6FF;color:#0284C7;border:1.5px solid #BAE6FD;">Cooking</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+            <div style="background:#fff;border:1.5px solid #E2E8F0;border-radius:11px;padding:12px;text-align:center;">
+              <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#0F172A;" id="stat-joined">0</div>
+              <div style="font-size:11px;color:#94A3B8;margin-top:1px;">Events joined</div>
+            </div>
+            <div style="background:#fff;border:1.5px solid #E2E8F0;border-radius:11px;padding:12px;text-align:center;">
+              <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#0F172A;" id="stat-hosted">0</div>
+              <div style="font-size:11px;color:#94A3B8;margin-top:1px;">Organized</div>
+            </div>
+            <div style="background:#fff;border:1.5px solid #E2E8F0;border-radius:11px;padding:12px;text-align:center;">
+              <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#0F172A;" id="stat-conn">9</div>
+              <div style="font-size:11px;color:#94A3B8;margin-top:1px;">Connections</div>
+            </div>
+          </div>
+          <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#94A3B8;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Your events</div>
+          <div id="my-events-list"><div style="font-size:13px;color:#94A3B8;">No events yet — create one!</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-wrap"></div>
+  <div class="toast-wrap" id="toast-wrap"></div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const CATS=[
+  {id:'all',label:'All',emoji:'✦'},
+  {id:'hiking',label:'Hiking',emoji:'🥾'},
+  {id:'cycling',label:'Cycling',emoji:'🚴'},
+  {id:'running',label:'Running',emoji:'👟'},
+  {id:'party',label:'Party',emoji:'🎉'},
+  {id:'cinema',label:'Cinema',emoji:'🎬'},
+  {id:'cooking',label:'Cooking',emoji:'🍳'},
+  {id:'climbing',label:'Climbing',emoji:'🧗'},
+  {id:'picnic',label:'Picnic',emoji:'🧺'},
+];
+
+const COLORS=['#6366F1','#0EA5E9','#10B981','#F59E0B','#EC4899','#F97316','#8B5CF6','#14B8A6'];
+
+let events=[
+  {id:1,title:'Uetliberg Sunrise Hike',category:'hiking',emoji:'🥾',date:'Sat, 8 Mar',time:'06:30',location:'Uetliberg',host:'Lena B.',hostAv:'LB',maxSlots:6,joined:3,desc:'Early morning hike up Uetliberg for sunrise views over the city and lake.',color:'#6366F1',lat:47.3531,lng:8.4915,isNew:false},
+  {id:2,title:'Lake Zurich Morning Run',category:'running',emoji:'👟',date:'Sun, 9 Mar',time:'08:00',location:'Strandbad Mythenquai',host:'Tim R.',hostAv:'TR',maxSlots:8,joined:5,desc:'Jog along the lake, 5km easy pace.',color:'#0EA5E9',lat:47.3533,lng:8.5397,isNew:false},
+  {id:3,title:'Altstadt Food Tour',category:'cooking',emoji:'🍳',date:'Fri, 7 Mar',time:'18:00',location:'Niederdorf',host:'Sara M.',hostAv:'SM',maxSlots:6,joined:5,desc:'Street food crawl through the old town. 5 different spots!',color:'#EC4899',lat:47.3729,lng:8.5430,isNew:false},
+  {id:4,title:'Friday Rooftop Party',category:'party',emoji:'🎉',date:'Fri, 7 Mar',time:'21:00',location:'Zürich West',host:'Max K.',hostAv:'MK',maxSlots:25,joined:17,desc:'Rooftop party in Züri West. BYOB, good vibes only.',color:'#F59E0B',lat:47.3839,lng:8.5187,isNew:false},
+  {id:5,title:'Cycling to Rapperswil',category:'cycling',emoji:'🚴',date:'Sat, 8 Mar',time:'09:00',location:'Bürkliplatz',host:'Felix W.',hostAv:'FW',maxSlots:5,joined:2,desc:'50km round trip along the lake. Coffee stop included.',color:'#10B981',lat:47.3659,lng:8.5414,isNew:false},
+  {id:6,title:'Climbing Session',category:'climbing',emoji:'🧗',date:'Wed, 5 Mar',time:'17:30',location:'Kletterhalle Zürich',host:'Mia L.',hostAv:'ML',maxSlots:4,joined:1,desc:'Bouldering for all levels. Shoes available.',color:'#F97316',lat:47.4001,lng:8.5351,isNew:false},
+];
+
+let state={activeCat:'all',activeView:'list',joinedIds:[],myEventIds:[],selectedCat:'',nextId:100,leafletMap:null,leafletMarkers:[]};
+
+function getFiltered(){return state.activeCat==='all'?events:events.filter(e=>e.category===state.activeCat);}
+
+function renderCats(){
+  document.getElementById('cats').innerHTML=CATS.map(c=>`
+    <div class="cat ${state.activeCat===c.id?'active':''}" onclick="setCat('${c.id}')">
+      <span style="font-size:14px;width:18px;text-align:center;">${c.emoji}</span>
+      <span class="cat-lbl">${c.label}</span>
+    </div>`).join('');
+}
+
+function setCat(id){state.activeCat=id;renderCats();renderEvents();}
+
+function renderEvents(){
+  const f=getFiltered();
+  document.getElementById('ecount').textContent=f.length+' event'+(f.length!==1?'s':'')+' found';
+  if(state.activeView==='list')renderList(f);
+  else renderMapView(f);
+}
+
+function renderList(evs){
+  document.getElementById('egrid').innerHTML=evs.map(ev=>{
+    const full=ev.joined>=ev.maxSlots;
+    const isJoined=state.joinedIds.includes(ev.id);
+    return`<div class="card${ev.isNew?' new-card':''}" onclick="openModal(${ev.id})">
+      <div class="ctop">
+        <div class="cicon" style="background:${ev.color}18;">${ev.emoji}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="ctitle">${ev.title}${ev.isNew?'<span class="new-badge">new</span>':''}</div>
+          <div class="cmeta">📅 ${ev.date} · ${ev.time}<br>📍 ${ev.location}</div>
+        </div>
+      </div>
+      <div class="cbot">
+        <div class="hrow">
+          <div class="hav" style="background:${ev.color};">${ev.hostAv}</div>
+          <span class="hname">${ev.host}</span>
+        </div>
+        <span class="slots" style="background:${isJoined?'#DCFCE7':full?'#FFE4E6':ev.color+'18'};color:${isJoined?'#16A34A':full?'#DC2626':ev.color};">${ev.joined}/${ev.maxSlots}${isJoined?' ✓':''}</span>
+      </div>
+    </div>`;}).join('');
+}
+
+function renderMapView(evs){
+  setTimeout(()=>{
+    if(!state.leafletMap){
+      state.leafletMap=L.map('map').setView([47.376,8.541],13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(state.leafletMap);
+    }
+    state.leafletMarkers.forEach(m=>state.leafletMap.removeLayer(m));
+    state.leafletMarkers=[];
+    evs.forEach(ev=>{
+      const icon=L.divIcon({className:'',html:`<div style="background:#fff;border:2px solid ${ev.color};border-radius:8px;padding:3px 7px 3px 5px;display:flex;align-items:center;gap:4px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.13);font-family:'DM Sans',sans-serif;"><span style="font-size:11px;">${ev.emoji}</span><span style="font-size:11px;font-weight:700;color:#0F172A;">${ev.title.split(' ').slice(0,2).join(' ')}</span></div>`,iconAnchor:[0,0]});
+      const m=L.marker([ev.lat,ev.lng],{icon}).addTo(state.leafletMap).on('click',()=>openModal(ev.id));
+      state.leafletMarkers.push(m);
+    });
+    state.leafletMap.invalidateSize();
+  },80);
+}
+
+function setView(v){
+  state.activeView=v;
+  document.getElementById('vl').classList.toggle('active',v==='list');
+  document.getElementById('vm').classList.toggle('active',v==='map');
+  document.getElementById('list-view').style.display=v==='list'?'block':'none';
+  document.getElementById('map-view').style.display=v==='map'?'block':'none';
+  renderEvents();
+}
+
+function openModal(id){
+  const ev=events.find(e=>e.id===id);
+  if(!ev)return;
+  const isJoined=state.joinedIds.includes(id);
+  const full=ev.joined>=ev.maxSlots&&!isJoined;
+  document.getElementById('modal-wrap').innerHTML=`
+    <div class="modal-bg" onclick="closeModal(event)">
+      <div class="modal">
+        <button class="xbtn" onclick="closeModal()">✕</button>
+        <div class="mhandle"></div>
+        <div style="font-size:34px;margin-bottom:7px;">${ev.emoji}</div>
+        <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#0F172A;">${ev.title}</div>
+        <div style="font-size:12px;color:#64748B;margin-top:2px;">by ${ev.host}</div>
+        <div class="mgrid">
+          <div class="minfo"><div class="mival">${ev.date}</div><div class="mikey">Date</div></div>
+          <div class="minfo"><div class="mival">${ev.time}</div><div class="mikey">Time</div></div>
+          <div class="minfo"><div class="mival" style="font-size:12px;">${ev.location}</div><div class="mikey">Location</div></div>
+          <div class="minfo"><div class="mival" id="modal-slots" style="color:${isJoined?'#16A34A':full?'#DC2626':'#0F172A'};">${ev.joined}/${ev.maxSlots} joined</div><div class="mikey">Spots</div></div>
+        </div>
+        <div style="font-size:13px;color:#475569;line-height:1.6;">${ev.desc}</div>
+        <button class="joinbtn" id="join-btn" onclick="toggleJoin(${id})" style="background:${isJoined?'#059669':full?'#94A3B8':'#0F172A'};" ${full&&!isJoined?'disabled':''}>
+          ${isJoined?'✓ You are in — leave?':full?'Event full':'Join event →'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function closeModal(e){if(!e||e.target.classList.contains('modal-bg'))document.getElementById('modal-wrap').innerHTML='';}
+
+function toggleJoin(id){
+  const ev=events.find(e=>e.id===id);
+  if(!ev)return;
+  if(state.joinedIds.includes(id)){
+    state.joinedIds=state.joinedIds.filter(i=>i!==id);
+    ev.joined=Math.max(0,ev.joined-1);
+    showToast('Left event');
+  } else {
+    if(ev.joined>=ev.maxSlots)return;
+    state.joinedIds.push(id);
+    ev.joined++;
+    showToast('🎉 You are in!');
+  }
+  updateStats();
+  renderEvents();
+  openModal(id);
+}
+
+function updateStats(){
+  document.getElementById('stat-joined').textContent=state.joinedIds.length;
+  document.getElementById('stat-hosted').textContent=state.myEventIds.length;
+  renderMyEvents();
+}
+
+function renderMyEvents(){
+  const myEvs=events.filter(e=>state.myEventIds.includes(e.id));
+  const el=document.getElementById('my-events-list');
+  if(!myEvs.length){el.innerHTML='<div style="font-size:13px;color:#94A3B8;">No events yet — create one!</div>';return;}
+  el.innerHTML=myEvs.map(ev=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-radius:11px;border:1.5px solid #E2E8F0;margin-bottom:7px;cursor:pointer;" onclick="switchTab('discover');openModal(${ev.id})">
+      <span style="font-size:18px;">${ev.emoji}</span>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#0F172A;font-family:'Syne',sans-serif;">${ev.title}</div>
+        <div style="font-size:11px;color:#64748B;">${ev.date} · ${ev.joined}/${ev.maxSlots} joined</div>
+      </div>
+    </div>`).join('');
+}
+
+function submitEvent(){
+  const title=document.getElementById('c-title').value.trim();
+  const loc=document.getElementById('c-loc').value.trim();
+  const date=document.getElementById('c-date').value;
+  const time=document.getElementById('c-time').value;
+  const slots=parseInt(document.getElementById('c-slots').value)||5;
+  const desc=document.getElementById('c-desc').value.trim();
+  if(!title){showToast('⚠️ Please enter a title');return;}
+  if(!state.selectedCat){showToast('⚠️ Please select a category');return;}
+  if(!loc){showToast('⚠️ Please enter a location');return;}
+  const cat=CATS.find(c=>c.id===state.selectedCat);
+  const color=COLORS[state.nextId%COLORS.length];
+  const initials=title.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  const newEv={
+    id:state.nextId++,
+    title,category:state.selectedCat,
+    emoji:cat?cat.emoji:'📅',
+    date:date?new Date(date).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}):'TBD',
+    time:time||'TBD',
+    location:loc,host:'Anna K.',hostAv:'AK',
+    maxSlots:slots,joined:0,
+    desc:desc||'No description provided.',
+    color,lat:47.376+((Math.random()-0.5)*0.04),lng:8.541+((Math.random()-0.5)*0.06),
+    isNew:true
+  };
+  events.unshift(newEv);
+  state.myEventIds.push(newEv.id);
+  document.getElementById('c-title').value='';
+  document.getElementById('c-loc').value='';
+  document.getElementById('c-date').value='';
+  document.getElementById('c-time').value='';
+  document.getElementById('c-slots').value='';
+  document.getElementById('c-desc').value='';
+  state.selectedCat='';
+  renderCreateCats();
+  updateStats();
+  showToast('🎉 Event published!');
+  setTimeout(()=>{switchTab('discover');state.activeCat='all';renderCats();renderEvents();},700);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast-wrap');
+  t.innerHTML=`<div class="toast">${msg}</div>`;
+  setTimeout(()=>{t.innerHTML='';},2200);
+}
+
+function switchTab(tab){
+  ['discover','create','profile'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===tab?'block':'none';
+    document.getElementById('nb-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+function renderCreateCats(){
+  document.getElementById('c-cats').innerHTML=CATS.filter(c=>c.id!=='all').map(c=>`
+    <div onclick="selectCat('${c.id}')" id="cc-${c.id}" style="padding:7px 4px;border-radius:8px;border:1.5px solid ${state.selectedCat===c.id?'#0EA5E9':'#E2E8F0'};background:${state.selectedCat===c.id?'#EFF6FF':'#fff'};display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;">
+      <span style="font-size:16px;">${c.emoji}</span>
+      <span style="font-size:10px;font-weight:500;color:${state.selectedCat===c.id?'#0284C7':'#64748B'};">${c.label}</span>
+    </div>`).join('');
+}
+
+function selectCat(id){state.selectedCat=id;renderCreateCats();}
+
+renderCats();
+renderEvents();
+renderCreateCats();
+updateStats();
+</script>
