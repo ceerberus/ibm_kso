@@ -17,13 +17,13 @@ export default function MapView({ events, onEventClick }: MapViewProps) {
     if (!mapContainer.current) return;
     if (map.current) return;
 
-    // Initialize with modern Airbnb-style map using Maptiler (free tier)
-    // This provides a clean, minimal vector tile style similar to Airbnb
+    // Get Maptiler API key from environment variable
+    const apiKey = import.meta.env.VITE_MAPTILER_API_KEY || 'get_your_own_OpIi9ZULNHzrESv6T2vL';
+
+    // Initialize with modern Airbnb-style map using Maptiler
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      // Using a modern, minimal style similar to Airbnb
-      // Free alternative: Maptiler Basic style (no API key needed for demo)
-      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${apiKey}`,
       center: [8.541, 47.376], // Zurich
       zoom: 13,
       pitch: 0,

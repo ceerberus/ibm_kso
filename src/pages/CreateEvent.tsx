@@ -137,7 +137,7 @@ export default function CreateEvent() {
               Category *
             </label>
             <div className="grid grid-cols-4 gap-2">
-              {CATEGORIES.filter((c) => c.id !== 'all').map((cat) => (
+              {CATEGORIES.filter((c) => c.id !== 'all' && c.id !== 'my-events').map((cat) => (
                 <div
                   key={cat.id}
                   onClick={() => setFormData({ ...formData, category: cat.id })}
