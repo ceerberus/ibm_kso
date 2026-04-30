@@ -426,9 +426,9 @@ const ActivityDetail = () => {
           </h2>
           <div className="border border-white/5 rounded-xl overflow-hidden">
             {/* Messages */}
-            <div className="h-72 overflow-y-auto p-4 space-y-4 bg-[#0e0e14]">
+            <div className="h-72 overflow-y-auto p-4 space-y-4 bg-white">
               {activity.chatMessages.length === 0 ? (
-                <p className="text-sm text-gray-600 text-center pt-10">
+                <p className="text-sm text-gray-400 text-center pt-10">
                   No messages yet. Say hi to the group!
                 </p>
               ) : (
@@ -436,7 +436,7 @@ const ActivityDetail = () => {
                   const isMine = msg.userId === currentUser?.id;
                   return (
                     <div key={msg.id} className={`flex gap-3 ${isMine ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-600 to-purple-700 flex items-center justify-center shrink-0">
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center shrink-0">
                         <span className="text-xs font-bold text-white">{msg.userName.charAt(0)}</span>
                       </div>
                       <div className={`max-w-xs flex flex-col ${isMine ? 'items-end' : 'items-start'}`}>
@@ -445,12 +445,12 @@ const ActivityDetail = () => {
                         </span>
                         <div className={`px-3.5 py-2.5 rounded-2xl text-sm ${
                           isMine
-                            ? 'bg-primary-600 text-white rounded-tr-sm'
-                            : 'bg-white/5 border border-white/5 text-gray-200 rounded-tl-sm'
+                            ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white rounded-tr-sm'
+                            : 'bg-gray-100 border border-gray-200 text-gray-900 rounded-tl-sm'
                         }`}>
                           {msg.content}
                         </div>
-                        <span className="text-xs text-gray-600 mt-1">
+                        <span className="text-xs text-gray-400 mt-1">
                           {new Date(msg.timestamp).toLocaleTimeString('en-CH', { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -462,19 +462,19 @@ const ActivityDetail = () => {
             </div>
 
             {/* Input */}
-            <div className="border-t border-white/5 p-3 bg-[#16161f] flex gap-2">
+            <div className="border-t border-gray-200 p-3 bg-white flex gap-2">
               <input
                 type="text"
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Message the group…"
-                className="flex-1 bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm px-4 py-2.5 rounded-xl outline-none focus:border-primary-500"
+                className="flex-1 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm px-4 py-2.5 rounded-xl outline-none focus:border-sky-500"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!chatInput.trim()}
-                className="px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="px-5 py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white rounded-xl text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
                 Send
               </button>

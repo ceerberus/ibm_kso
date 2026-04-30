@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -16,41 +16,13 @@
   }
 }
 
-/* Global styles */
+/* Global styles - Minimalist approach */
 @layer base {
   body {
     @apply text-gray-900 antialiased;
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    background-color: #c5e600;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     background-attachment: fixed;
-    position: relative;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image:
-      radial-gradient(ellipse 65% 55% at 8% 12%, rgba(255, 235, 50, 0.65) 0%, transparent 60%),
-      radial-gradient(ellipse 55% 60% at 92% 82%, rgba(240, 80, 210, 0.3) 0%, transparent 58%),
-      radial-gradient(ellipse 50% 45% at 50% 96%, rgba(60, 220, 130, 0.38) 0%, transparent 55%),
-      radial-gradient(ellipse 48% 40% at 96% 6%, rgba(255, 240, 80, 0.45) 0%, transparent 52%),
-      radial-gradient(ellipse 40% 35% at 35% 55%, rgba(255, 180, 50, 0.18) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px);
-    background-size: 26px 26px;
-    pointer-events: none;
-    z-index: 0;
   }
 
   html {
@@ -66,15 +38,15 @@
 /* Custom animations */
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.4s ease-in-out;
   }
   
   .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
+    animation: slideUp 0.4s ease-out;
   }
   
-  .animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
   }
 }
 
@@ -89,11 +61,22 @@
 
 @keyframes slideUp {
   from {
-    transform: translateY(10px);
+    transform: translateY(20px);
     opacity: 0;
   }
   to {
     transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
     opacity: 1;
   }
 }
@@ -103,25 +86,39 @@
   @apply rounded-2xl;
 }
 
-/* Toast notifications styling */
+/* Toast notifications styling - Minimalist */
 .Toastify__toast {
-  @apply rounded-lg shadow-lg;
+  @apply rounded-xl shadow-lg border;
 }
 
 .Toastify__toast--success {
-  @apply bg-green-500;
+  @apply bg-white border-green-200;
+  color: #059669;
 }
 
 .Toastify__toast--error {
-  @apply bg-red-500;
+  @apply bg-white border-red-200;
+  color: #dc2626;
 }
 
 .Toastify__toast--info {
-  @apply bg-blue-500;
+  @apply bg-white border-blue-200;
+  color: #2563eb;
 }
 
 .Toastify__toast--warning {
-  @apply bg-orange-500;
+  @apply bg-white border-orange-200;
+  color: #ea580c;
+}
+
+/* Smooth transitions for interactive elements */
+button, a {
+  @apply transition-all duration-200;
+}
+
+/* Card hover effects */
+.card-hover {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
 }
 
 /* Made with Bob */
