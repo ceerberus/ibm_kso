@@ -103,7 +103,7 @@ export const getStatusColor = (status: string): string => {
     case 'open':
       return 'text-green-600 bg-green-50';
     case 'filling_fast':
-      return 'text-orange-600 bg-orange-50';
+      return 'text-blue-600 bg-blue-50';
     case 'full':
       return 'text-red-600 bg-red-50';
     case 'cancelled':

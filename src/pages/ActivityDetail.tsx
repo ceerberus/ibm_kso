@@ -6,10 +6,10 @@ import { useUserStore } from '../store/userStore';
 import { useNotificationStore } from '../store/notificationStore';
 
 const CARD_GRADIENTS: Record<string, string> = {
-  travel:  'from-blue-100 via-blue-50 to-cyan-50',
-  concert: 'from-violet-100 via-fuchsia-50 to-pink-50',
-  sports:  'from-green-100 via-emerald-50 to-teal-50',
-  event:   'from-orange-100 via-amber-50 to-yellow-50',
+  travel:  'from-sky-100 via-sky-50 to-blue-50',
+  concert: 'from-purple-100 via-violet-50 to-primary-50',
+  sports:  'from-cyan-100 via-sky-50 to-blue-50',
+  event:   'from-indigo-100 via-blue-50 to-secondary-50',
   other:   'from-gray-100 via-gray-50 to-zinc-50',
 };
 
@@ -50,10 +50,14 @@ const ActivityDetail = () => {
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [chatInput, setChatInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const prevMessageCountRef = useRef<number>(0);
 
   const refresh = () => setActivity(getActivityById(Number(id)));
 
   useEffect(() => {
+    // Scroll to top when activity detail page loads
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     if (id) {
       incrementViewCount(Number(id));
       refresh();
@@ -61,7 +65,13 @@ const ActivityDetail = () => {
   }, [id]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Only scroll if messages were added (not on initial load)
+    if (activity && prevMessageCountRef.current > 0 && activity.chatMessages.length > prevMessageCountRef.current) {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (activity) {
+      prevMessageCountRef.current = activity.chatMessages.length;
+    }
   }, [activity?.chatMessages.length]);
 
   if (!activity) {
@@ -172,33 +182,33 @@ const ActivityDetail = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`rounded-2xl overflow-hidden bg-gradient-to-br ${gradient}`}
+        className="rounded-2xl overflow-hidden bg-white shadow-lg"
       >
         <div className="p-8">
           <div className="flex items-start justify-between mb-6">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-3xl">{typeIcon}</span>
-                <span className="px-3 py-1 bg-black/30 border border-white/10 text-white/80 text-xs font-semibold rounded-lg capitalize">
+                <span className="px-3 py-1 bg-gray-700 text-white text-xs font-semibold rounded-lg capitalize">
                   {activity.type}
                 </span>
                 <span className={`px-3 py-1 rounded-lg text-xs font-semibold border ${
-                  activity.status === 'open' ? 'bg-green-500/20 text-green-300 border-green-500/30' :
-                  activity.status === 'filling_fast' ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' :
-                  'bg-red-500/20 text-red-300 border-red-500/30'
+                  activity.status === 'open' ? 'bg-violet-100 text-violet-700 border-violet-200' :
+                  activity.status === 'filling_fast' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                  'bg-red-100 text-red-700 border-red-200'
                 }`}>
                   {activity.status === 'open' ? 'Open' : activity.status === 'filling_fast' ? 'Filling Fast' : 'Full'}
                 </span>
               </div>
-              <h1 className="text-3xl font-black text-white leading-tight mb-3">{activity.title}</h1>
-              <p className="text-white/70 leading-relaxed">{activity.description}</p>
+              <h1 className="text-3xl font-black text-gray-900 leading-tight mb-3">{activity.title}</h1>
+              <p className="text-gray-700 leading-relaxed">{activity.description}</p>
             </div>
             <button
               onClick={handleSaveToggle}
-              className="p-3 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-xl transition-all border border-white/20 shrink-0"
+              className="p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all border border-gray-200 shrink-0"
               title={isActivitySaved(activity.id) ? 'Remove from saved' : 'Save for later'}
             >
-              <svg className="w-6 h-6 text-white" fill={isActivitySaved(activity.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-gray-700" fill={isActivitySaved(activity.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
               </svg>
             </button>
@@ -206,24 +216,24 @@ const ActivityDetail = () => {
 
           {/* Meta row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="bg-black/20 rounded-xl p-4">
-              <p className="text-white/40 text-xs mb-1">Location</p>
-              <p className="text-white font-semibold text-sm">{activity.location}</p>
-              <p className="text-white/60 text-xs">{activity.city}</p>
+            <div className="bg-gray-100 rounded-xl p-4">
+              <p className="text-gray-500 text-xs mb-1">Location</p>
+              <p className="text-gray-900 font-semibold text-sm">{activity.location}</p>
+              <p className="text-gray-600 text-xs">{activity.city}</p>
             </div>
-            <div className="bg-black/20 rounded-xl p-4">
-              <p className="text-white/40 text-xs mb-1">Date & Time</p>
-              <p className="text-white font-semibold text-sm">
+            <div className="bg-gray-100 rounded-xl p-4">
+              <p className="text-gray-500 text-xs mb-1">Date & Time</p>
+              <p className="text-gray-900 font-semibold text-sm">
                 {new Date(activity.date).toLocaleDateString('en-CH', { day: 'numeric', month: 'long', year: 'numeric' })}
               </p>
-              {activity.time && <p className="text-white/60 text-xs">at {activity.time}</p>}
+              {activity.time && <p className="text-gray-600 text-xs">at {activity.time}</p>}
             </div>
-            <div className="bg-black/20 rounded-xl p-4">
-              <p className="text-white/40 text-xs mb-1">Spots</p>
-              <p className="text-white font-semibold text-sm">{spotsLeft} of {activity.totalSpots} left</p>
-              <div className="mt-2 w-full bg-white/10 rounded-full h-1.5">
+            <div className="bg-gray-100 rounded-xl p-4">
+              <p className="text-gray-500 text-xs mb-1">Spots</p>
+              <p className="text-gray-900 font-semibold text-sm">{spotsLeft} of {activity.totalSpots} left</p>
+              <div className="mt-2 w-full bg-gray-200 rounded-full h-1.5">
                 <div
-                  className={`h-1.5 rounded-full ${progressPercentage >= 80 ? 'bg-red-400' : progressPercentage >= 50 ? 'bg-orange-400' : 'bg-green-400'}`}
+                  className={`h-1.5 rounded-full ${progressPercentage >= 80 ? 'bg-red-500' : progressPercentage >= 50 ? 'bg-blue-500' : 'bg-violet-500'}`}
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>
@@ -232,20 +242,20 @@ const ActivityDetail = () => {
 
           {/* Pricing */}
           {activity.pricePerPerson && (
-            <div className="bg-black/20 rounded-xl p-4 mb-6">
-              <p className="text-white/40 text-xs mb-1">🎟 Group Ticket Info</p>
-              <p className="text-white/80 text-sm leading-relaxed">
+            <div className="bg-gray-100 rounded-xl p-4 mb-6">
+              <p className="text-gray-500 text-xs mb-1">🎟 Group Ticket Info</p>
+              <p className="text-gray-700 text-sm leading-relaxed">
                 The group ticket is{' '}
-                <span className="text-white font-bold">CHF {activity.pricePerPerson} per person</span>
+                <span className="text-gray-900 font-bold">CHF {activity.pricePerPerson} per person</span>
                 {activity.regularPrice && (
-                  <> (regular: <span className="line-through text-white/40">CHF {activity.regularPrice}</span>)</>
+                  <> (regular: <span className="line-through text-gray-400">CHF {activity.regularPrice}</span>)</>
                 )}
                 {' '}— CHF{' '}
-                <span className="text-white font-bold">{activity.pricePerPerson * activity.totalSpots} total</span>{' '}
+                <span className="text-gray-900 font-bold">{activity.pricePerPerson * activity.totalSpots} total</span>{' '}
                 for {activity.totalSpots} people.
                 {activity.regularPrice && (
                   <> Save{' '}
-                    <span className="text-green-400 font-bold">
+                    <span className="text-violet-600 font-bold">
                       CHF {(activity.regularPrice - activity.pricePerPerson) * activity.totalSpots}
                     </span>{' '}
                     vs. individual tickets.
@@ -253,7 +263,7 @@ const ActivityDetail = () => {
                 )}
               </p>
               {activity.groupDiscountInfo && (
-                <p className="text-white/30 text-xs italic mt-1">{activity.groupDiscountInfo}</p>
+                <p className="text-gray-500 text-xs italic mt-1">{activity.groupDiscountInfo}</p>
               )}
             </div>
           )}
@@ -263,7 +273,7 @@ const ActivityDetail = () => {
             <div>
               {isParticipant ? (
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 text-green-400 text-sm font-semibold">
+                  <div className="flex items-center gap-2 text-violet-400 text-sm font-semibold">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                     </svg>
@@ -277,24 +287,24 @@ const ActivityDetail = () => {
                   </button>
                 </div>
               ) : isPending ? (
-                <div className="flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                  <svg className="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center gap-3 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
+                  <svg className="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-amber-300 text-sm flex-1 font-medium">
+                  <p className="text-indigo-300 text-sm flex-1 font-medium">
                     Your request is pending approval from the organiser.
                   </p>
-                  <button onClick={handleCancelRequest} className="text-xs text-amber-400 underline hover:text-amber-300">
+                  <button onClick={handleCancelRequest} className="text-xs text-indigo-400 underline hover:text-indigo-300">
                     Cancel
                   </button>
                 </div>
               ) : activity.spotsTaken >= activity.totalSpots ? (
-                <button disabled className="w-full py-4 rounded-xl font-bold text-base bg-white/5 text-white/30 cursor-not-allowed">
+                <button disabled className="w-full py-4 rounded-xl font-bold text-base bg-gray-100 text-gray-400 cursor-not-allowed">
                   Activity Full
                 </button>
               ) : showRequestForm ? (
-                <div className="space-y-3 p-4 bg-black/30 rounded-xl border border-white/10">
-                  <p className="text-white/70 text-sm font-medium">
+                <div className="space-y-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                  <p className="text-gray-700 text-sm font-medium">
                     Say hi to the organiser (optional)
                   </p>
                   <textarea
@@ -302,7 +312,7 @@ const ActivityDetail = () => {
                     onChange={(e) => setRequestMessage(e.target.value)}
                     placeholder="e.g. Hey! I'm a big fan of hiking and would love to join…"
                     rows={3}
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm px-4 py-3 rounded-xl outline-none focus:border-primary-500 resize-none"
+                    className="w-full bg-white border border-gray-300 text-gray-900 placeholder-gray-400 text-sm px-4 py-3 rounded-xl outline-none focus:border-primary-500 resize-none"
                   />
                   <div className="flex gap-3">
                     <button
@@ -313,7 +323,7 @@ const ActivityDetail = () => {
                     </button>
                     <button
                       onClick={() => setShowRequestForm(false)}
-                      className="px-5 py-3 text-sm font-semibold text-gray-400 border border-white/10 rounded-xl hover:bg-white/5 transition-colors"
+                      className="px-5 py-3 text-sm font-semibold text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
                     >
                       Cancel
                     </button>
@@ -401,7 +411,7 @@ const ActivityDetail = () => {
                 <div className="flex gap-2 shrink-0">
                   <button
                     onClick={() => handleApprove(req.userId, `${req.user.firstName} ${req.user.lastName}`)}
-                    className="px-3 py-1.5 text-xs font-bold bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors"
+                    className="px-3 py-1.5 text-xs font-bold bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors"
                   >
                     Approve
                   </button>
@@ -424,11 +434,11 @@ const ActivityDetail = () => {
           <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">
             Group Chat
           </h2>
-          <div className="border border-white/5 rounded-xl overflow-hidden">
+          <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
             {/* Messages */}
-            <div className="h-72 overflow-y-auto p-4 space-y-4 bg-[#0e0e14]">
+            <div className="h-72 overflow-y-auto p-4 space-y-4 bg-white">
               {activity.chatMessages.length === 0 ? (
-                <p className="text-sm text-gray-600 text-center pt-10">
+                <p className="text-sm text-gray-500 text-center pt-10">
                   No messages yet. Say hi to the group!
                 </p>
               ) : (
@@ -446,11 +456,11 @@ const ActivityDetail = () => {
                         <div className={`px-3.5 py-2.5 rounded-2xl text-sm ${
                           isMine
                             ? 'bg-primary-600 text-white rounded-tr-sm'
-                            : 'bg-white/5 border border-white/5 text-gray-200 rounded-tl-sm'
+                            : 'bg-gray-100 text-gray-900 rounded-tl-sm'
                         }`}>
                           {msg.content}
                         </div>
-                        <span className="text-xs text-gray-600 mt-1">
+                        <span className="text-xs text-gray-400 mt-1">
                           {new Date(msg.timestamp).toLocaleTimeString('en-CH', { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -462,14 +472,14 @@ const ActivityDetail = () => {
             </div>
 
             {/* Input */}
-            <div className="border-t border-white/5 p-3 bg-[#16161f] flex gap-2">
+            <div className="border-t border-gray-200 p-3 bg-gray-50 flex gap-2">
               <input
                 type="text"
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Message the group…"
-                className="flex-1 bg-white/5 border border-white/10 text-white placeholder-gray-600 text-sm px-4 py-2.5 rounded-xl outline-none focus:border-primary-500"
+                className="flex-1 bg-white border border-gray-300 text-gray-900 placeholder-gray-400 text-sm px-4 py-2.5 rounded-xl outline-none focus:border-primary-500"
               />
               <button
                 onClick={handleSendMessage}

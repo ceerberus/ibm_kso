@@ -35,7 +35,7 @@ const Profile = () => {
     return (
       <div className="text-center py-20">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-        <button onClick={() => navigate('/')} className="text-blue-600 hover:text-blue-700">
+        <button onClick={() => navigate('/')} className="text-primary-500 hover:text-primary-400">
           Back to Home
         </button>
       </div>
@@ -127,7 +127,7 @@ const Profile = () => {
             </div>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl transition-all text-sm"
+              className="px-6 py-2.5 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-xl transition-all text-sm"
             >
               Save Changes
             </button>
@@ -194,7 +194,7 @@ const Profile = () => {
               <p className="text-gray-600 text-sm mb-4">You haven't created any activities yet.</p>
               <button
                 onClick={() => navigate('/create')}
-                className="px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-bold rounded-xl transition-all"
+                className="px-4 py-2 bg-sky-500 hover:bg-sky-400 text-white text-sm font-bold rounded-xl transition-all"
               >
                 Create Activity
               </button>
@@ -212,7 +212,7 @@ const Profile = () => {
                     <div className="flex items-start justify-between mb-1">
                       <h3 className="font-bold text-white text-sm">{activity.title}</h3>
                       {pendingCount > 0 && (
-                        <span className="ml-2 px-2 py-0.5 bg-amber-500/15 text-amber-400 text-xs font-bold rounded-lg shrink-0 border border-amber-500/20">
+                        <span className="ml-2 px-2 py-0.5 bg-indigo-500/15 text-indigo-400 text-xs font-bold rounded-lg shrink-0 border border-indigo-500/20">
                           {pendingCount} pending
                         </span>
                       )}

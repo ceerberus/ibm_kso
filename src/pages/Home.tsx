@@ -26,7 +26,7 @@ const Home = () => {
             className="space-y-8"
           >
             <div>
-              <span className="inline-block px-4 py-1.5 rounded-full backdrop-blur-md border border-white/30 text-gray-900 text-xs font-bold tracking-widest uppercase mb-6" style={{ backgroundColor: '#c5e600' }}>
+              <span className="inline-block px-4 py-1.5 rounded-full backdrop-blur-md border border-white/30 text-white text-xs font-bold tracking-widest uppercase mb-6 bg-sky-500">
                 Switzerland's group activity platform
               </span>
               <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight mb-6">
@@ -61,8 +61,7 @@ const Home = () => {
               </select>
               <button
                 onClick={() => navigate('/browse')}
-                className="px-8 py-4 text-gray-900 font-black rounded-xl transition-all text-sm shadow-sm hover:brightness-110"
-                style={{ backgroundColor: '#c5e600' }}
+                className="px-8 py-4 bg-sky-500 hover:bg-sky-400 text-white font-black rounded-xl transition-all text-sm shadow-lg"
               >
                 Search
               </button>

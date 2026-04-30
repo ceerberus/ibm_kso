@@ -21,7 +21,7 @@
   body {
     @apply text-gray-900 antialiased;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    background-color: #c5e600;
+    background-color: #e0f2fe;
     background-attachment: fixed;
     position: relative;
   }
@@ -34,11 +34,11 @@
     right: 0;
     bottom: 0;
     background-image:
-      radial-gradient(ellipse 65% 55% at 8% 12%, rgba(255, 235, 50, 0.65) 0%, transparent 60%),
-      radial-gradient(ellipse 55% 60% at 92% 82%, rgba(240, 80, 210, 0.3) 0%, transparent 58%),
-      radial-gradient(ellipse 50% 45% at 50% 96%, rgba(60, 220, 130, 0.38) 0%, transparent 55%),
-      radial-gradient(ellipse 48% 40% at 96% 6%, rgba(255, 240, 80, 0.45) 0%, transparent 52%),
-      radial-gradient(ellipse 40% 35% at 35% 55%, rgba(255, 180, 50, 0.18) 0%, transparent 50%);
+      radial-gradient(ellipse 65% 55% at 8% 12%, rgba(139, 92, 246, 0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 60% at 92% 82%, rgba(99, 102, 241, 0.2) 0%, transparent 58%),
+      radial-gradient(ellipse 50% 45% at 50% 96%, rgba(59, 130, 246, 0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 48% 40% at 96% 6%, rgba(14, 165, 233, 0.25) 0%, transparent 52%),
+      radial-gradient(ellipse 40% 35% at 35% 55%, rgba(167, 139, 250, 0.15) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
   }
@@ -47,7 +47,7 @@
     content: '';
     position: fixed;
     inset: 0;
-    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px);
+    background-image: radial-gradient(circle, rgba(139, 92, 246, 0.05) 1.5px, transparent 1.5px);
     background-size: 26px 26px;
     pointer-events: none;
     z-index: 0;
@@ -121,7 +121,7 @@
 }
 
 .Toastify__toast--warning {
-  @apply bg-orange-500;
+  @apply bg-indigo-500;
 }
 
 /* Made with Bob */

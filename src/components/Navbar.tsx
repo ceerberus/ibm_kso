@@ -63,7 +63,7 @@ const Navbar = () => {
               className="font-extrabold text-3xl tracking-tight"
             >
               <span className="text-white">link</span>
-              <span style={{ color: '#c5e600' }}>up</span>
+              <span className="text-sky-400">up</span>
               <span className="text-white">.</span>
             </motion.div>
           </Link>
@@ -134,7 +134,7 @@ const Navbar = () => {
                       {unreadCount > 0 && (
                         <button
                           onClick={markAllAsRead}
-                          className="text-xs text-fuchsia-600 hover:text-fuchsia-700 font-semibold"
+                          className="text-xs text-primary-600 hover:text-primary-700 font-semibold"
                         >
                           Mark all read
                         </button>
@@ -153,7 +153,7 @@ const Navbar = () => {
                             key={notification.id}
                             onClick={() => handleNotificationClick(notification.id)}
                             className={`px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
-                              !notification.isRead ? 'bg-fuchsia-50' : ''
+                              !notification.isRead ? 'bg-primary-50' : ''
                             }`}
                           >
                             <div className="flex items-start gap-3">
@@ -163,7 +163,7 @@ const Navbar = () => {
                                     {notification.title}
                                   </p>
                                   {!notification.isRead && (
-                                    <span className="w-2 h-2 bg-fuchsia-500 rounded-full shrink-0" />
+                                    <span className="w-2 h-2 bg-primary-500 rounded-full shrink-0" />
                                   )}
                                 </div>
                                 <p className="text-xs text-gray-600 line-clamp-2">
@@ -186,8 +186,7 @@ const Navbar = () => {
             {/* Create CTA */}
             <button
               onClick={() => setShowCreateModal(true)}
-              className="hidden md:flex items-center gap-1.5 px-4 py-2 text-gray-900 text-sm font-bold rounded-xl transition-all shadow-sm hover:brightness-110"
-              style={{ backgroundColor: '#c5e600' }}
+              className="hidden md:flex items-center gap-1.5 px-4 py-2 bg-sky-500 hover:bg-sky-400 text-white text-sm font-bold rounded-xl transition-all shadow-lg"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -198,7 +197,7 @@ const Navbar = () => {
             {/* Avatar */}
             {currentUser && (
               <Link to="/profile">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-600 flex items-center justify-center ring-2 ring-white/40 hover:ring-white/80 transition-all">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-sky-600 flex items-center justify-center ring-2 ring-white/40 hover:ring-white/80 transition-all">
                   <span className="text-xs font-bold text-white">
                     {currentUser.firstName.charAt(0)}
                   </span>

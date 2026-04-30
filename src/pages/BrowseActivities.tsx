@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useActivityStore } from '../store/activityStore';
 import { useUserStore } from '../store/userStore';
 import { Activity } from '../types';
+import MapView from '../components/MapView';
 
 const CATEGORIES = [
   { label: 'All', value: '', icon: '✦' },
@@ -14,16 +15,16 @@ const CATEGORIES = [
 ];
 
 const CARD_STYLES: Record<string, { gradient: string; glow: string }> = {
-  travel:  { gradient: 'from-blue-100 via-blue-50 to-cyan-50',        glow: 'group-hover:shadow-blue-200/60' },
-  concert: { gradient: 'from-violet-100 via-fuchsia-50 to-pink-50',   glow: 'group-hover:shadow-fuchsia-200/60' },
-  sports:  { gradient: 'from-green-100 via-emerald-50 to-teal-50',    glow: 'group-hover:shadow-emerald-200/60' },
-  event:   { gradient: 'from-orange-100 via-amber-50 to-yellow-50',   glow: 'group-hover:shadow-amber-200/60' },
+  travel:  { gradient: 'from-sky-100 via-sky-50 to-blue-50',          glow: 'group-hover:shadow-sky-200/60' },
+  concert: { gradient: 'from-purple-100 via-violet-50 to-primary-50', glow: 'group-hover:shadow-primary-200/60' },
+  sports:  { gradient: 'from-cyan-100 via-sky-50 to-blue-50',    glow: 'group-hover:shadow-cyan-200/60' },
+  event:   { gradient: 'from-indigo-100 via-blue-50 to-secondary-50', glow: 'group-hover:shadow-indigo-200/60' },
   other:   { gradient: 'from-gray-100 via-gray-50 to-zinc-50',        glow: 'group-hover:shadow-gray-200/60' },
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  open:         'bg-green-100 text-green-700 border border-green-200',
-  filling_fast: 'bg-orange-100 text-orange-700 border border-orange-200',
+  open:         'bg-violet-100 text-violet-700 border border-violet-200',
+  filling_fast: 'bg-blue-100 text-blue-700 border border-blue-200',
   full:         'bg-red-100 text-red-700 border border-red-200',
   cancelled:    'bg-gray-100 text-gray-700 border border-gray-200',
   completed:    'bg-gray-100 text-gray-700 border border-gray-200',
@@ -36,12 +37,13 @@ const STATUS_LABELS: Record<string, string> = {
 
 const BrowseActivities = () => {
   const navigate = useNavigate();
-  const { activities, setFilters, applyFilters } = useActivityStore();
+  const { filteredActivities, setFilters, applyFilters } = useActivityStore();
   const { saveActivity, unsaveActivity, isActivitySaved } = useUserStore();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedType, setSelectedType] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
 
   useEffect(() => {
     applyFilters();
@@ -115,8 +117,7 @@ const BrowseActivities = () => {
         </select>
         <button
           onClick={handleSearch}
-          className="px-8 py-3 text-gray-900 font-black rounded-xl transition-all text-sm shadow-sm hover:brightness-110"
-          style={{ backgroundColor: '#c5e600' }}
+          className="px-8 py-3 bg-primary-600 hover:bg-primary-500 text-white font-black rounded-xl transition-all text-sm shadow-lg"
         >
           Search
         </button>
@@ -130,7 +131,7 @@ const BrowseActivities = () => {
             onClick={() => handleCategoryPill(cat.value)}
             className={`shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all border ${
               selectedType === cat.value
-                ? 'bg-fuchsia-100 border-fuchsia-400 text-fuchsia-700 shadow-sm shadow-fuchsia-100'
+                ? 'bg-primary-100 border-primary-400 text-primary-700 shadow-sm shadow-primary-100'
                 : 'bg-white/90 border-white text-gray-700 hover:text-gray-900 hover:bg-white shadow-sm backdrop-blur-sm'
             }`}
           >
@@ -140,9 +141,60 @@ const BrowseActivities = () => {
         ))}
       </div>
 
+      {/* View Mode Tabs */}
+      <div className="flex gap-2 border-b border-gray-200">
+        <button
+          onClick={() => setViewMode('grid')}
+          className={`px-6 py-3 font-semibold text-sm transition-all relative ${
+            viewMode === 'grid'
+              ? 'text-primary-600'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <span className="flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            Grid View
+          </span>
+          {viewMode === 'grid' && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600" />
+          )}
+        </button>
+        <button
+          onClick={() => setViewMode('map')}
+          className={`px-6 py-3 font-semibold text-sm transition-all relative ${
+            viewMode === 'map'
+              ? 'text-primary-600'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <span className="flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            Map View
+          </span>
+          {viewMode === 'map' && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600" />
+          )}
+        </button>
+      </div>
+
+      {/* Map View */}
+      {viewMode === 'map' && (
+        <div className="mt-6">
+          <MapView
+            activities={filteredActivities}
+            onActivityClick={(id) => navigate(`/activities/${id}`)}
+          />
+        </div>
+      )}
+
       {/* Activities Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {activities.map((activity, index) => {
+      {viewMode === 'grid' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredActivities.map((activity, index) => {
           const style = CARD_STYLES[activity.type] ?? CARD_STYLES.other;
           const pricingNote = getPricingNote(activity);
           const pct = (activity.spotsTaken / activity.totalSpots) * 100;
@@ -181,7 +233,7 @@ const BrowseActivities = () => {
                         className="p-1.5 bg-white/90 backdrop-blur-sm rounded-lg hover:bg-white transition-all shadow-sm"
                         title={isActivitySaved(activity.id) ? 'Remove from saved' : 'Save for later'}
                       >
-                        <svg className="w-4 h-4 text-fuchsia-600" fill={isActivitySaved(activity.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-primary-600" fill={isActivitySaved(activity.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                         </svg>
                       </button>
@@ -206,7 +258,7 @@ const BrowseActivities = () => {
                         className="p-1.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all"
                         title={isActivitySaved(activity.id) ? 'Remove from saved' : 'Save for later'}
                       >
-                        <svg className="w-4 h-4 text-fuchsia-600" fill={isActivitySaved(activity.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-primary-600" fill={isActivitySaved(activity.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                         </svg>
                       </button>
@@ -250,7 +302,7 @@ const BrowseActivities = () => {
                   <div className="w-full bg-gray-200 rounded-full h-1.5">
                     <div
                       className={`h-1.5 rounded-full transition-all ${
-                        pct >= 80 ? 'bg-red-500' : pct >= 50 ? 'bg-orange-500' : 'bg-green-500'
+                        pct >= 80 ? 'bg-red-500' : pct >= 50 ? 'bg-blue-500' : 'bg-violet-500'
                       }`}
                       style={{ width: `${pct}%` }}
                     />
@@ -264,7 +316,8 @@ const BrowseActivities = () => {
             </motion.div>
           );
         })}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

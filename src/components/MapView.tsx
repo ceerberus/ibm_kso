@@ -72,7 +72,7 @@ export default function MapView({ activities, onActivityClick }: MapViewProps) {
       if (capacityPercent >= 80) {
         spotColor = '#EF4444'; // Red - almost full/full
       } else if (capacityPercent >= 50) {
-        spotColor = '#F59E0B'; // Orange - getting full
+        spotColor = '#3B82F6'; // Blue - getting full
       } else {
         spotColor = '#10B981'; // Green - plenty of spots
       }

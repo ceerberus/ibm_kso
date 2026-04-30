@@ -13,16 +13,16 @@ const CATEGORIES = [
 ];
 
 const CARD_STYLES: Record<string, { gradient: string; glow: string }> = {
-  travel:  { gradient: 'from-blue-100 via-blue-50 to-cyan-50',        glow: 'group-hover:shadow-blue-200/60' },
-  concert: { gradient: 'from-violet-100 via-fuchsia-50 to-pink-50',   glow: 'group-hover:shadow-fuchsia-200/60' },
-  sports:  { gradient: 'from-green-100 via-emerald-50 to-teal-50',    glow: 'group-hover:shadow-emerald-200/60' },
-  event:   { gradient: 'from-orange-100 via-amber-50 to-yellow-50',   glow: 'group-hover:shadow-amber-200/60' },
+  travel:  { gradient: 'from-sky-100 via-sky-50 to-blue-50',          glow: 'group-hover:shadow-sky-200/60' },
+  concert: { gradient: 'from-purple-100 via-violet-50 to-primary-50', glow: 'group-hover:shadow-primary-200/60' },
+  sports:  { gradient: 'from-cyan-100 via-sky-50 to-blue-50',    glow: 'group-hover:shadow-cyan-200/60' },
+  event:   { gradient: 'from-indigo-100 via-blue-50 to-secondary-50', glow: 'group-hover:shadow-indigo-200/60' },
   other:   { gradient: 'from-gray-100 via-gray-50 to-zinc-50',        glow: 'group-hover:shadow-gray-200/60' },
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  open:         'bg-green-100 text-green-700 border border-green-200',
-  filling_fast: 'bg-orange-100 text-orange-700 border border-orange-200',
+  open:         'bg-violet-100 text-violet-700 border border-violet-200',
+  filling_fast: 'bg-blue-100 text-blue-700 border border-blue-200',
   full:         'bg-red-100 text-red-700 border border-red-200',
   cancelled:    'bg-gray-100 text-gray-700 border border-gray-200',
   completed:    'bg-gray-100 text-gray-700 border border-gray-200',
@@ -96,7 +96,7 @@ const Saved = () => {
           </p>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-sm"
+            className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-sm"
           >
             Browse Activities
           </button>
@@ -221,7 +221,7 @@ const Saved = () => {
                       <div className="w-full bg-gray-200 rounded-full h-1.5">
                         <div
                           className={`h-1.5 rounded-full transition-all ${
-                            pct >= 80 ? 'bg-red-500' : pct >= 50 ? 'bg-orange-500' : 'bg-green-500'
+                            pct >= 80 ? 'bg-red-500' : pct >= 50 ? 'bg-blue-500' : 'bg-violet-500'
                           }`}
                           style={{ width: `${pct}%` }}
                         />

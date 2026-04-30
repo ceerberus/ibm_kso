@@ -48,7 +48,7 @@ function App() {
             <div>
               <h3 className="font-extrabold text-lg mb-3 text-gray-900">
                 <span>link</span>
-                <span style={{ color: '#c5e600' }} className="drop-shadow-sm">up</span>
+                <span className="text-primary-600 drop-shadow-sm">up</span>
                 <span>.</span>
               </h3>
               <p className="text-gray-600 text-sm">
