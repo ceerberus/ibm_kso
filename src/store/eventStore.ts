@@ -90,8 +90,12 @@ export const useEventStore = create<EventStore>((set, get) => ({
   },
 
   getFilteredEvents: () => {
-    const { events, activeCat } = get();
+    const { events, activeCat, joinedIds } = get();
     if (activeCat === 'all') return events;
+    if (activeCat === 'my-events') {
+      // Show only events the user has joined
+      return events.filter((e) => joinedIds.includes(e.id));
+    }
     return events.filter((e) => e.category === activeCat);
   },
 

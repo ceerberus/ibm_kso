@@ -2,6 +2,7 @@ import { Event, Category } from '../types';
 
 export const CATEGORIES: Category[] = [
   { id: 'all', label: 'All', emoji: '✦' },
+  { id: 'my-events', label: 'My Events', emoji: '⭐' },
   { id: 'hiking', label: 'Hiking', emoji: '🥾' },
   { id: 'cycling', label: 'Cycling', emoji: '🚴' },
   { id: 'running', label: 'Running', emoji: '👟' },
