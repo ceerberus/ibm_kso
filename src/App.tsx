@@ -15,7 +15,12 @@ function TopBar() {
 
   return (
     <div className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 flex items-center justify-between flex-shrink-0">
-      <div className="font-syne text-xl font-extrabold text-dark">meetup.</div>
+      <div
+        className="font-syne text-xl font-extrabold text-dark cursor-pointer hover:opacity-70 transition-opacity"
+        onClick={() => navigate('/')}
+      >
+        meetup.
+      </div>
       <nav className="hidden md:flex gap-1">
         <Link
           to="/discover"
