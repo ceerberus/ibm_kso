@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import Discover from './pages/Discover';
 import CreateEvent from './pages/CreateEvent';
 import Profile from './pages/Profile';
@@ -8,6 +8,7 @@ import Toast from './components/Toast';
 
 function TopBar() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -31,18 +32,13 @@ function TopBar() {
         >
           + Create
         </Link>
-        <Link
-          to="/profile"
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-            isActive('/profile') ? 'bg-sky-50 text-primary' : 'text-slate-600 hover:bg-slate-50'
-          }`}
-        >
-          Profile
-        </Link>
       </nav>
-      <div className="flex items-center gap-2">
-        <span className="hidden md:inline text-sm text-slate-600">Anna K.</span>
-        <div className="w-8 h-8 rounded-full bg-dark flex items-center justify-center text-white text-[11px] font-bold font-syne">
+      <div
+        className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+        onClick={() => navigate('/profile')}
+      >
+        <span className="hidden md:inline text-sm text-slate-600 font-medium">Anna K.</span>
+        <div className="w-8 h-8 rounded-full bg-dark flex items-center justify-center text-white text-[11px] font-bold font-syne hover:ring-2 hover:ring-primary hover:ring-offset-2 transition-all">
           AK
         </div>
       </div>

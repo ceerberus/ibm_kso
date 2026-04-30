@@ -2,6 +2,8 @@ import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEventStore } from '../store/eventStore';
 import { CATEGORIES, COLORS } from '../data/mockEvents';
+import AddressInput from '../components/AddressInput';
+import { geocodeAddress } from '../utils/geocoding';
 
 export default function CreateEvent() {
   const navigate = useNavigate();
@@ -17,7 +19,11 @@ export default function CreateEvent() {
     description: '',
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  // Store coordinates from geocoding
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  const [isGeocoding, setIsGeocoding] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     // Validation
@@ -37,9 +43,25 @@ export default function CreateEvent() {
     const category = CATEGORIES.find((c) => c.id === formData.category);
     const slots = parseInt(formData.maxSlots) || 5;
 
-    // Generate random coordinates near Zurich
-    const lat = 47.376 + (Math.random() - 0.5) * 0.04;
-    const lng = 8.541 + (Math.random() - 0.5) * 0.06;
+    // Use geocoded coordinates if available, otherwise try to geocode now
+    let lat = coordinates?.lat;
+    let lng = coordinates?.lng;
+
+    if (!lat || !lng) {
+      setIsGeocoding(true);
+      const result = await geocodeAddress(formData.location);
+      setIsGeocoding(false);
+
+      if (result) {
+        lat = result.lat;
+        lng = result.lng;
+      } else {
+        // Fallback to random coordinates near Zurich if geocoding fails
+        lat = 47.376 + (Math.random() - 0.5) * 0.04;
+        lng = 8.541 + (Math.random() - 0.5) * 0.06;
+        alert('⚠️ Could not find exact location. Using approximate coordinates.');
+      }
+    }
 
     // Format date
     let dateStr = 'TBD';
@@ -79,6 +101,7 @@ export default function CreateEvent() {
       maxSlots: '',
       description: '',
     });
+    setCoordinates(null);
 
     // Navigate to discover page after a short delay
     setTimeout(() => {
@@ -164,17 +187,21 @@ export default function CreateEvent() {
           </div>
 
           {/* Location and Max Slots */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="block text-[11px] font-bold text-slate-600 tracking-wider uppercase mb-1.5 font-syne">
                 Location *
               </label>
-              <input
-                type="text"
+              <AddressInput
                 value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                placeholder="e.g. Lindenhügel"
-                className="w-full px-3 py-2.5 rounded-lg border-2 border-gray-200 text-sm outline-none bg-slate-50 focus:border-primary focus:bg-white transition-colors"
+                onChange={(value, lat, lng) => {
+                  setFormData({ ...formData, location: value });
+                  if (lat && lng) {
+                    setCoordinates({ lat, lng });
+                  }
+                }}
+                placeholder="e.g., Bahnhofstrasse 1"
+                required
               />
             </div>
             <div>
@@ -210,9 +237,10 @@ export default function CreateEvent() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-dark text-white font-syne text-sm font-extrabold hover:bg-slate-800 transition-colors"
+            disabled={isGeocoding}
+            className="w-full py-3 rounded-xl bg-dark text-white font-syne text-sm font-extrabold hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Publish event ✦
+            {isGeocoding ? 'Finding location...' : 'Publish event ✦'}
           </button>
         </form>
       </div>

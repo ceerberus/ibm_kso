@@ -39,6 +39,15 @@ export const useEventStore = create<EventStore>((set, get) => ({
     }, 10000);
   },
 
+  updateEvent: (id, updates) => {
+    set((state) => ({
+      events: state.events.map((e) =>
+        e.id === id ? { ...e, ...updates } : e
+      ),
+    }));
+    get().displayToast('✓ Event updated!');
+  },
+
   toggleJoin: (id) => {
     const event = get().events.find((e) => e.id === id);
     if (!event) return;

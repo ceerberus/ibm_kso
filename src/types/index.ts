@@ -36,6 +36,7 @@ export interface EventStore {
   
   // Actions
   addEvent: (event: Omit<Event, 'id' | 'isNew'>) => void;
+  updateEvent: (id: number, updates: Partial<Event>) => void;
   toggleJoin: (id: number) => void;
   setCategory: (cat: string) => void;
   setView: (view: ViewMode) => void;

@@ -1,15 +1,24 @@
+import { useState } from 'react';
 import { useEventStore } from '../store/eventStore';
 import { useNavigate } from 'react-router-dom';
+import EditEventModal from '../components/EditEventModal';
+import { Event } from '../types';
 
 export default function Profile() {
   const { events, joinedIds, myEventIds } = useEventStore();
   const navigate = useNavigate();
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
   const joinedEvents = events.filter((e) => joinedIds.includes(e.id));
   const myEvents = events.filter((e) => myEventIds.includes(e.id));
 
   const handleEventClick = (eventId: number) => {
     navigate(`/?event=${eventId}`);
+  };
+
+  const handleEditClick = (event: Event, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingEvent(event);
   };
 
   return (
@@ -66,16 +75,21 @@ export default function Profile() {
               {myEvents.map((event) => (
                 <div
                   key={event.id}
-                  onClick={() => handleEventClick(event.id)}
-                  className="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-gray-200 cursor-pointer hover:border-sky-300 transition-colors"
+                  className="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-gray-200 hover:border-sky-300 transition-colors"
                 >
                   <span className="text-xl">{event.emoji}</span>
-                  <div className="flex-1">
+                  <div className="flex-1 cursor-pointer" onClick={() => handleEventClick(event.id)}>
                     <div className="text-sm font-semibold text-dark font-syne">{event.title}</div>
                     <div className="text-[11px] text-slate-600">
                       {event.date} · {event.joined}/{event.maxSlots} joined
                     </div>
                   </div>
+                  <button
+                    onClick={(e) => handleEditClick(event, e)}
+                    className="px-3 py-1.5 text-xs font-semibold text-primary bg-sky-50 rounded-lg hover:bg-sky-100 transition-colors"
+                  >
+                    Edit
+                  </button>
                 </div>
               ))}
             </div>
@@ -113,6 +127,14 @@ export default function Profile() {
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {editingEvent && (
+        <EditEventModal
+          event={editingEvent}
+          onClose={() => setEditingEvent(null)}
+        />
+      )}
     </div>
   );
 }
