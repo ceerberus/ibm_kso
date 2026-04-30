@@ -4,27 +4,27 @@
  */
 
 import { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ActivityDetail from './pages/ActivityDetail';
 import Profile from './pages/Profile';
 import Saved from './pages/Saved';
+import BrowseActivities from './pages/BrowseActivities';
 import { startDemoSimulator } from './utils/demoSimulator';
 
 function App() {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   useEffect(() => {
-    // Start demo simulator for realistic activity
     const cleanup = startDemoSimulator();
-    
-    return () => {
-      if (cleanup) cleanup();
-    };
+    return () => { if (cleanup) cleanup(); };
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className={isHome ? 'h-screen overflow-hidden' : 'min-h-screen'}>
       <Navbar />
 
       <motion.main
@@ -35,13 +35,14 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/browse" element={<BrowseActivities />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="/activities/:id" element={<ActivityDetail />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </motion.main>
 
-      <footer className="bg-white/90 backdrop-blur-sm border-t border-white/50 mt-16">
+      {!isHome && <footer className="bg-white/90 backdrop-blur-sm border-t border-white/50 mt-16">
         <div className="container mx-auto px-4 py-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
@@ -57,7 +58,7 @@ function App() {
             <div>
               <h3 className="font-bold text-sm text-gray-700 uppercase tracking-widest mb-3">Links</h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><a href="/" className="hover:text-gray-900 transition-colors">Browse Activities</a></li>
+                <li><Link to="/browse" className="hover:text-gray-900 transition-colors">Browse Activities</Link></li>
                 <li><a href="/profile" className="hover:text-gray-900 transition-colors">My Profile</a></li>
               </ul>
             </div>
@@ -73,7 +74,7 @@ function App() {
             &copy; 2026 linkup. Built for Swiss group activities.
           </div>
         </div>
-      </footer>
+      </footer>}
     </div>
   );
 }
