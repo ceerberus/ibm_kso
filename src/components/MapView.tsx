@@ -58,6 +58,23 @@ export default function MapView({ events, onEventClick }: MapViewProps) {
       const el = document.createElement('div');
       el.className = 'airbnb-marker';
       
+      // Truncate title if too long for better display
+      const truncatedTitle = event.title.length > 20
+        ? event.title.substring(0, 20) + '...'
+        : event.title;
+      
+      // Calculate capacity percentage and determine color
+      const capacityPercent = (event.joined / event.maxSlots) * 100;
+      let spotColor: string;
+      
+      if (capacityPercent >= 80) {
+        spotColor = '#EF4444'; // Red - almost full/full
+      } else if (capacityPercent >= 50) {
+        spotColor = '#F59E0B'; // Orange - getting full
+      } else {
+        spotColor = '#10B981'; // Green - plenty of spots
+      }
+      
       // Airbnb uses simple pill-shaped markers with price/info
       el.innerHTML = `
         <div class="marker-content" style="
@@ -79,7 +96,9 @@ export default function MapView({ events, onEventClick }: MapViewProps) {
           letter-spacing: -0.01em;
         ">
           <span style="font-size: 14px; line-height: 1;">${event.emoji}</span>
-          <span style="font-weight: 600;">${event.joined}/${event.maxSlots}</span>
+          <span style="font-weight: 500; color: #222222;">${truncatedTitle}</span>
+          <span style="font-weight: 600; color: ${spotColor};">·</span>
+          <span style="font-weight: 600; color: ${spotColor};">${event.joined}/${event.maxSlots}</span>
         </div>
       `;
 

@@ -18,13 +18,14 @@ export const useEventStore = create<EventStore>((set, get) => ({
       ...eventData,
       id: nextId++,
       isNew: true,
-      joined: 0,
+      joined: 1, // Creator automatically joins
       color: COLORS[nextId % COLORS.length],
     };
 
     set((state) => ({
       events: [newEvent, ...state.events],
       myEventIds: [...state.myEventIds, newEvent.id],
+      joinedIds: [...state.joinedIds, newEvent.id], // Auto-join creator
     }));
 
     get().displayToast('🎉 Event published!');

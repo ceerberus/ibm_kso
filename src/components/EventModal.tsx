@@ -6,8 +6,12 @@ interface EventModalProps {
   onClose: () => void;
 }
 
-export default function EventModal({ event, onClose }: EventModalProps) {
-  const { joinedIds, toggleJoin } = useEventStore();
+export default function EventModal({ event: initialEvent, onClose }: EventModalProps) {
+  const { events, joinedIds, toggleJoin } = useEventStore();
+  
+  // Get the latest event data from store to ensure reactivity
+  const event = events.find(e => e.id === initialEvent.id) || initialEvent;
+  
   const isJoined = joinedIds.includes(event.id);
   const isFull = event.joined >= event.maxSlots && !isJoined;
 
