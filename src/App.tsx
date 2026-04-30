@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      {/* Hide navbar on landing page */}
+      {/* Show navbar on all pages except landing */}
       {!isLandingPage && <Navbar />}
 
       <motion.main

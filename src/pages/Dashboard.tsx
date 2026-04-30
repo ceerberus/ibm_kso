@@ -15,11 +15,11 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_GRADIENTS: Record<string, string> = {
-  travel: 'from-sky-400 to-cyan-500',
-  concert: 'from-purple-400 to-pink-500',
-  sports: 'from-emerald-400 to-teal-500',
-  event: 'from-orange-400 to-amber-500',
-  other: 'from-gray-400 to-slate-500',
+  travel: 'from-sky-400/70 to-cyan-500/70',
+  concert: 'from-purple-400/70 to-pink-500/70',
+  sports: 'from-emerald-400/70 to-teal-500/70',
+  event: 'from-orange-400/70 to-amber-500/70',
+  other: 'from-gray-400/70 to-slate-500/70',
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -238,55 +238,76 @@ const Dashboard = () => {
                   onClick={() => navigate(`/activities/${activity.id}`)}
                   className="group relative rounded-3xl overflow-hidden bg-white cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col border border-gray-200"
                 >
-                  {/* Gradient header */}
-                  <div className={`relative h-24 bg-gradient-to-br ${gradient} p-5 flex items-center justify-between`}>
-                    <div className="flex items-center gap-3">
-                      <span className="text-4xl drop-shadow-lg">
-                        {CATEGORIES.find(c => c.value === activity.type)?.icon ?? '✦'}
-                      </span>
-                      <div className="text-white">
-                        <div className="text-xs font-semibold opacity-90">{activity.type.toUpperCase()}</div>
-                        <div className="text-sm font-bold">{spotsLeft} spots left</div>
+                  {/* Gradient header with status badge */}
+                  <div className={`relative h-32 bg-gradient-to-br ${gradient} p-5`}>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-4xl drop-shadow-lg">
+                          {CATEGORIES.find(c => c.value === activity.type)?.icon ?? '✦'}
+                        </span>
+                        <div className="text-white">
+                          <div className="text-xs font-semibold opacity-90">{activity.type.toUpperCase()}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-3 py-1 rounded-lg text-xs font-semibold ${STATUS_STYLES[activity.status]}`}>
+                          {STATUS_LABELS[activity.status]}
+                        </span>
+                        <button
+                          onClick={(e) => handleSaveToggle(e, activity.id)}
+                          className="p-2 bg-white rounded-xl hover:scale-110 transition-all shadow-lg"
+                        >
+                          <svg className="w-5 h-5 text-gray-900" fill={isActivitySaved(activity.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                          </svg>
+                        </button>
                       </div>
                     </div>
-                    <button
-                      onClick={(e) => handleSaveToggle(e, activity.id)}
-                      className="p-2 bg-white rounded-xl hover:scale-110 transition-all shadow-lg"
-                    >
-                      <svg className="w-5 h-5 text-gray-900" fill={isActivitySaved(activity.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                      </svg>
-                    </button>
+                    <div className="text-white">
+                      <div className="text-sm font-bold mb-2">{spotsLeft} of {activity.totalSpots} spots left</div>
+                      <div className="w-full bg-white/20 rounded-full h-1.5">
+                        <div
+                          className={`h-1.5 rounded-full transition-all ${pct >= 80 ? 'bg-red-400' : pct >= 50 ? 'bg-orange-400' : 'bg-green-400'}`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-6 flex-1 bg-white">
-                    <h3 className="text-xl font-bold text-gray-900 leading-tight mb-4">
+                    <h3 className="text-xl font-bold text-gray-900 leading-tight mb-3">
                       {activity.title}
                     </h3>
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">{activity.description}</p>
                     
-                    <div className="space-y-3">
+                    <div className="space-y-2.5">
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <svg className="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span className="font-medium">{activity.city}</span>
+                        <span className="font-medium">{activity.location}, {activity.city}</span>
                       </div>
                       
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <svg className="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <span className="font-medium">{new Date(activity.date).toLocaleDateString('en-CH', { day: 'numeric', month: 'long' })}</span>
+                        <span className="font-medium">
+                          {new Date(activity.date).toLocaleDateString('en-CH', { day: 'numeric', month: 'long' })}
+                          {activity.time && ` at ${activity.time}`}
+                        </span>
                       </div>
 
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                        <span className="font-medium">{activity.spotsTaken}/{activity.totalSpots} joined</span>
-                      </div>
+                      {pricingNote && (
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="font-medium">{pricingNote}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>

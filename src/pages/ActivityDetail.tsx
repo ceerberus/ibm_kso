@@ -179,19 +179,19 @@ const ActivityDetail = () => {
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-3xl">{typeIcon}</span>
-                <span className="px-3 py-1 bg-black/30 border border-white/10 text-white/80 text-xs font-semibold rounded-lg capitalize">
+                <span className="px-3 py-1 bg-white/90 border border-white text-gray-900 text-xs font-semibold rounded-lg capitalize">
                   {activity.type}
                 </span>
                 <span className={`px-3 py-1 rounded-lg text-xs font-semibold border ${
-                  activity.status === 'open' ? 'bg-green-500/20 text-green-300 border-green-500/30' :
-                  activity.status === 'filling_fast' ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' :
-                  'bg-red-500/20 text-red-300 border-red-500/30'
+                  activity.status === 'open' ? 'bg-green-500/90 text-white border-green-600' :
+                  activity.status === 'filling_fast' ? 'bg-orange-500/90 text-white border-orange-600' :
+                  'bg-red-500/90 text-white border-red-600'
                 }`}>
                   {activity.status === 'open' ? 'Open' : activity.status === 'filling_fast' ? 'Filling Fast' : 'Full'}
                 </span>
               </div>
-              <h1 className="text-3xl font-black text-white leading-tight mb-3">{activity.title}</h1>
-              <p className="text-white/70 leading-relaxed">{activity.description}</p>
+              <h1 className="text-3xl font-black text-white leading-tight mb-3 drop-shadow-lg">{activity.title}</h1>
+              <p className="text-white leading-relaxed drop-shadow-md">{activity.description}</p>
             </div>
             <button
               onClick={handleSaveToggle}
@@ -206,22 +206,22 @@ const ActivityDetail = () => {
 
           {/* Meta row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="bg-black/20 rounded-xl p-4">
-              <p className="text-white/40 text-xs mb-1">Location</p>
-              <p className="text-white font-semibold text-sm">{activity.location}</p>
-              <p className="text-white/60 text-xs">{activity.city}</p>
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+              <p className="text-white/90 text-xs mb-1 font-semibold">Location</p>
+              <p className="text-white font-bold text-sm drop-shadow">{activity.location}</p>
+              <p className="text-white/90 text-xs">{activity.city}</p>
             </div>
-            <div className="bg-black/20 rounded-xl p-4">
-              <p className="text-white/40 text-xs mb-1">Date & Time</p>
-              <p className="text-white font-semibold text-sm">
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+              <p className="text-white/90 text-xs mb-1 font-semibold">Date & Time</p>
+              <p className="text-white font-bold text-sm drop-shadow">
                 {new Date(activity.date).toLocaleDateString('en-CH', { day: 'numeric', month: 'long', year: 'numeric' })}
               </p>
-              {activity.time && <p className="text-white/60 text-xs">at {activity.time}</p>}
+              {activity.time && <p className="text-white/90 text-xs">at {activity.time}</p>}
             </div>
-            <div className="bg-black/20 rounded-xl p-4">
-              <p className="text-white/40 text-xs mb-1">Spots</p>
-              <p className="text-white font-semibold text-sm">{spotsLeft} of {activity.totalSpots} left</p>
-              <div className="mt-2 w-full bg-white/10 rounded-full h-1.5">
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
+              <p className="text-white/90 text-xs mb-1 font-semibold">Spots</p>
+              <p className="text-white font-bold text-sm drop-shadow">{spotsLeft} of {activity.totalSpots} left</p>
+              <div className="mt-2 w-full bg-white/20 rounded-full h-1.5">
                 <div
                   className={`h-1.5 rounded-full ${progressPercentage >= 80 ? 'bg-red-400' : progressPercentage >= 50 ? 'bg-orange-400' : 'bg-green-400'}`}
                   style={{ width: `${progressPercentage}%` }}
@@ -232,9 +232,9 @@ const ActivityDetail = () => {
 
           {/* Pricing */}
           {activity.pricePerPerson && (
-            <div className="bg-black/20 rounded-xl p-4 mb-6">
-              <p className="text-white/40 text-xs mb-1">🎟 Group Ticket Info</p>
-              <p className="text-white/80 text-sm leading-relaxed">
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 mb-6 border border-white/30">
+              <p className="text-white/90 text-xs mb-1 font-semibold">🎟 Group Ticket Info</p>
+              <p className="text-white text-sm leading-relaxed drop-shadow">
                 The group ticket is{' '}
                 <span className="text-white font-bold">CHF {activity.pricePerPerson} per person</span>
                 {activity.regularPrice && (
@@ -340,13 +340,13 @@ const ActivityDetail = () => {
 
       {/* Organiser */}
       <Card delay={0.1}>
-        <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Organised by</h2>
+        <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">{activity.creator.firstName} {activity.creator.lastName}</h2>
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center">
             <span className="text-base font-bold text-white">{activity.creator.firstName.charAt(0)}</span>
           </div>
           <div>
-            <p className="font-bold text-white">{activity.creator.firstName} {activity.creator.lastName}</p>
+            <p className="font-bold text-white">Organiser</p>
             <p className="text-sm text-gray-500">{activity.creator.city}</p>
           </div>
         </div>
